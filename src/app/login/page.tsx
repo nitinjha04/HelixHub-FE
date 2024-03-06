@@ -11,9 +11,13 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Image from "next/image";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAuthStore } from "@/store/auth";
 
 const Login = () => {
-  const [field, setField] = useState(false);
+  const [registerCard, setRegisterCard] = useState(false);
+
+  const { login: handleLogin } = useAuthStore();
+  const { register: handleRegister } = useAuthStore();
 
   const {
     register,
@@ -40,10 +44,10 @@ const Login = () => {
             <p>
               you can{" "}
               <span
-                onClick={() => setField((prev) => !prev)}
+                onClick={() => setRegisterCard((prev) => !prev)}
                 className=" cursor-pointer px-2 font-semibold text-base   underline text-[#4D47C3]"
               >
-                {field ? "Login here" : " Register here"} !
+                {registerCard ? "Login here" : " Register here"} !
               </span>{" "}
             </p>
           </span>
@@ -58,18 +62,22 @@ const Login = () => {
         <div className="  flex flex-1 basis-1/2 flex-col  lg:px-12 my-auto lg:py-0 py-6  ">
           <form
             onSubmit={handleSubmit((data) => {
-              if (field) {
-                console.log(data);
+              if (registerCard) {
+                handleRegister(data);
+                // console.log(data);
               } else {
-                console.log({
-                  email: data.email,
-                  password: data.password,
-                });
+                // console.log({
+                //   email: data.email,
+                //   password: data.password,
+                // });
+                handleLogin({ email: data.email, password: data.password });
               }
             })}
             className="max-w-[369px] min-w-[322px] gap-9 flex flex-col mx-auto"
           >
-            <div className={` flex flex-col ${field ? " gap-3" : "gap-6"}`}>
+            <div
+              className={` flex flex-col ${registerCard ? " gap-3" : "gap-6"}`}
+            >
               <span className=" hidden lg:flex text-[#000000] font-medium text-3xl leading-[45px] text-start items-start">
                 Sign in
               </span>
@@ -90,7 +98,7 @@ const Login = () => {
                   className=" bg-[#F0EFFF] rounded-lg  py-3 px-3"
                 />
               </FormControl>
-              {field && (
+              {registerCard && (
                 <div className=" flex flex-col gap-3">
                   <FormControl>
                     <Input
@@ -152,13 +160,13 @@ const Login = () => {
                   }
                   className=" bg-[#F0EFFF] rounded-lg  py-3 px-3"
                 />
-                {field === false && (
+                {registerCard === false && (
                   <span className=" font-normal text-[#B0B0B0] text-sm text-end items-end py-2">
                     Forgot password ?
                   </span>
                 )}
               </FormControl>
-              {field && (
+              {registerCard && (
                 <FormControl className="">
                   <Input
                     required
@@ -204,7 +212,7 @@ const Login = () => {
                 textTransform: "none",
               }}
             >
-              {field ? "Register" : "Login"}
+              {registerCard ? "Register" : "Login"}
             </Button>
             <span className=" flex flex-col gap-4 font-normal text-[#B0B0B0] text-sm text-center items-center py-2">
               or continue with

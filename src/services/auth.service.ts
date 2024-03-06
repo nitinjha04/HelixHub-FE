@@ -1,12 +1,11 @@
 import httpservice from "@/config/httpservice";
 
-interface LoginData {
-  username?: string;
+export interface LoginData {
   email?: string;
   password: string;
 }
 
-interface RegisterData extends LoginData {
+export interface RegisterData extends LoginData {
   phone: number;
 }
 
