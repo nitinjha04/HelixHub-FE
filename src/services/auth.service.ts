@@ -1,21 +1,13 @@
 import httpservice from "@/config/httpservice";
-
-export interface LoginData {
-  email?: string;
-  password: string;
-}
-
-export interface RegisterData extends LoginData {
-  phone: number;
-}
+import { LoginData, RegisterData } from "@/interface";
 
 class AuthService {
   login = async (data: LoginData): Promise<any> => {
     try {
-      const response = await httpservice.post("api/users/login", {
-        params: data,
+      const response = await httpservice.post("api/user/login", {
+        ...data,
       });
-      return response.data;
+      return response;
     } catch (error) {
       console.log(error);
       throw error;
@@ -25,7 +17,7 @@ class AuthService {
   register = async (data: RegisterData): Promise<any> => {
     try {
       const response = await httpservice.post("/api/user/register", {
-        params: data,
+        ...data,
       });
       return response;
     } catch (error) {

@@ -9,9 +9,10 @@ import {
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAuthStore } from "@/store/auth";
+import { useAuthStore } from "@/store/auth.store";
+import { LoginData, RegisterData } from "@/interface";
 
 const Login = () => {
   const [registerCard, setRegisterCard] = useState(false);
@@ -20,12 +21,21 @@ const Login = () => {
   const { register: handleRegister } = useAuthStore();
 
   const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm();
+    register: registerLogin,
+    handleSubmit: loginSubmit,
+    setValue: loginSetValue,
+    formState: { errors: loginError },
+  } = useForm<LoginData>();
+
+  const {
+    register: registerRegister,
+    handleSubmit: registerSubmit,
+    setValue: registerSetValue,
+    formState: { errors: registerError },
+  } = useForm<RegisterData>();
+
+
+  
 
   return (
     <>
@@ -60,90 +70,80 @@ const Login = () => {
           />
         </div>
         <div className="  flex flex-1 basis-1/2 flex-col  lg:px-12 my-auto lg:py-0 py-6  ">
-          <form
-            onSubmit={handleSubmit((data) => {
-              if (registerCard) {
+          {registerCard ? (
+            <form
+              onSubmit={registerSubmit((data) => {
                 handleRegister(data);
-                // console.log(data);
-              } else {
-                // console.log({
-                //   email: data.email,
-                //   password: data.password,
-                // });
-                handleLogin({ email: data.email, password: data.password });
-              }
-            })}
-            className="max-w-[369px] min-w-[322px] gap-9 flex flex-col mx-auto"
-          >
-            <div
-              className={` flex flex-col ${registerCard ? " gap-3" : "gap-6"}`}
+              })}
+              className="max-w-[369px] min-w-[322px] gap-9 flex flex-col mx-auto"
             >
-              <span className=" hidden lg:flex text-[#000000] font-medium text-3xl leading-[45px] text-start items-start">
-                Sign in
-              </span>
-              <FormControl>
-                <Input
-                  required
-                  sx={{
-                    "::placeholder": {
-                      color: "#A7A3FF",
-                    },
-                  }}
-                  {...register("email", {
-                    required: "email is required",
-                  })}
-                  name="email"
-                  disableUnderline
-                  placeholder="Enter email or user name"
-                  className=" bg-[#F0EFFF] rounded-lg  py-3 px-3"
-                />
-              </FormControl>
-              {registerCard && (
-                <div className=" flex flex-col gap-3">
-                  <FormControl>
-                    <Input
-                      required
-                      {...register("userName", {
-                        required: "User name is required",
-                      })}
-                      name="userName"
-                      disableUnderline
-                      placeholder="Create User name"
-                      className=" bg-[#F0EFFF] rounded-lg  py-3 px-3"
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <Input
-                      required
-                      {...register("phone", {
-                        required: "Contact number is required",
-                      })}
-                      name="phone"
-                      disableUnderline
-                      placeholder="Contact number"
-                      className=" bg-[#F0EFFF] rounded-lg  py-3 px-3"
-                    />
-                  </FormControl>
-                </div>
-              )}
-              <FormControl className="">
-                <Input
-                  required
-                  disableUnderline
-                  {...register("password", {
-                    required: "password is required",
-                  })}
-                  name="password"
-                  placeholder="Password"
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        size="small"
-                        aria-label="toggle password visibility"
-                        // onClick={() => handleClickShowPassword(1)}
-                        // onMouseDown={handleMouseDownPassword}
-                      >
-                        {/* {values.showPassword ? (
+              <div
+                className={` flex flex-col ${
+                  registerCard ? " gap-3" : "gap-6"
+                }`}
+              >
+                <span className=" hidden lg:flex text-[#000000] font-medium text-3xl leading-[45px] text-start items-start">
+                  Sign in
+                </span>
+                <FormControl>
+                  <Input
+                    required
+                    sx={{
+                      "::placeholder": {
+                        color: "#A7A3FF",
+                      },
+                    }}
+                    {...registerRegister("email", {
+                      required: "email is required",
+                    })}
+                    name="email"
+                    disableUnderline
+                    placeholder="Enter email or user name"
+                    className=" bg-[#F0EFFF] rounded-lg  py-3 px-3"
+                  />
+                </FormControl>
+                <FormControl>
+                  <Input
+                    required
+                    {...registerRegister("userName", {
+                      required: "User name is required",
+                    })}
+                    name="userName"
+                    disableUnderline
+                    placeholder="Create User name"
+                    className=" bg-[#F0EFFF] rounded-lg  py-3 px-3"
+                  />
+                </FormControl>
+                <FormControl>
+                  <Input
+                    required
+                    {...registerRegister("phone", {
+                      required: "Contact number is required",
+                    })}
+                    name="phone"
+                    disableUnderline
+                    placeholder="Contact number"
+                    className=" bg-[#F0EFFF] rounded-lg  py-3 px-3"
+                  />
+                </FormControl>
+                <FormControl>
+                  <Input
+                    required
+                    disableUnderline
+                    {...registerRegister("password", {
+                      required: "password is required",
+                    })}
+                    name="password"
+                    placeholder="Password"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          size="small"
+                          aria-label="toggle password visibility"
+                          // onClick={() => handleClickShowPassword(1)}
+                          // onMouseDown={handleMouseDownPassword}
+                        >
+                          {/* {values.showPassword ? (
                           <VisibilityOff
                             className="text-[#D0D0D0]"
                             fontSize="small"
@@ -151,26 +151,20 @@ const Login = () => {
                         ) : (
 
                         )} */}
-                        <Visibility
-                          className="text-[#D0D0D0]"
-                          fontSize="small"
-                        />
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  className=" bg-[#F0EFFF] rounded-lg  py-3 px-3"
-                />
-                {registerCard === false && (
-                  <span className=" font-normal text-[#B0B0B0] text-sm text-end items-end py-2">
-                    Forgot password ?
-                  </span>
-                )}
-              </FormControl>
-              {registerCard && (
-                <FormControl className="">
+                          <Visibility
+                            className="text-[#D0D0D0]"
+                            fontSize="small"
+                          />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    className=" bg-[#F0EFFF] rounded-lg  py-3 px-3"
+                  />
+                </FormControl>
+                <FormControl>
                   <Input
                     required
-                    {...register("confirmPassword", {
+                    {...registerRegister("confirmPassword", {
                       required: "Confirm password is required",
                     })}
                     name="confirmPassword"
@@ -202,29 +196,123 @@ const Login = () => {
                     className=" bg-[#F0EFFF] rounded-lg  py-3 px-3"
                   />
                 </FormControl>
-              )}
-            </div>
-            <Button
-              type="submit"
-              style={{ boxShadow: "0 4px 61px 6px rgba(77, 71, 195, 0.4)" }}
-              className=" hover:bg-[#4D47C3] py-3 shadow-2xl mx-auto text-center bg-[#4D47C3] rounded-lg  text-[#FFFFFF] font-medium text-base min-w-full "
-              sx={{
-                textTransform: "none",
-              }}
+              </div>
+              <Button
+                type="submit"
+                style={{ boxShadow: "0 4px 61px 6px rgba(77, 71, 195, 0.4)" }}
+                className=" hover:bg-[#4D47C3] py-3 shadow-2xl mx-auto text-center bg-[#4D47C3] rounded-lg  text-[#FFFFFF] font-medium text-base min-w-full "
+                sx={{
+                  textTransform: "none",
+                }}
+              >
+                Register
+              </Button>
+              <span className=" flex flex-col gap-4 font-normal text-[#B0B0B0] text-sm text-center items-center py-2">
+                or continue with
+                <Image
+                  className=" mx-auto  cursor-pointer"
+                  height={41}
+                  width={41}
+                  alt="googleImg"
+                  src="/login/google.svg"
+                />
+              </span>
+            </form>
+          ) : (
+            <form
+              onSubmit={loginSubmit((data) => {
+
+                handleLogin({ email: data.email, password: data.password });
+              })}
+              className="max-w-[369px] min-w-[322px] gap-9 flex flex-col mx-auto"
             >
-              {registerCard ? "Register" : "Login"}
-            </Button>
-            <span className=" flex flex-col gap-4 font-normal text-[#B0B0B0] text-sm text-center items-center py-2">
-              or continue with
-              <Image
-                className=" mx-auto  cursor-pointer"
-                height={41}
-                width={41}
-                alt="googleImg"
-                src="/login/google.svg"
-              />
-            </span>
-          </form>
+              <div
+                className={` flex flex-col ${
+                  registerCard ? " gap-3" : "gap-6"
+                }`}
+              >
+                <span className=" hidden lg:flex text-[#000000] font-medium text-3xl leading-[45px] text-start items-start">
+                  Sign in
+                </span>
+                <FormControl>
+                  <Input
+                    required
+                    sx={{
+                      "::placeholder": {
+                        color: "#A7A3FF",
+                      },
+                    }}
+                    {...registerLogin("email", {
+                      required: "email is required",
+                    })}
+                    name="email"
+                    disableUnderline
+                    placeholder="Enter email"
+                    className=" bg-[#F0EFFF] rounded-lg  py-3 px-3"
+                  />
+                </FormControl>
+                <FormControl>
+                  <Input
+                    required
+                    disableUnderline
+                    {...registerLogin("password", {
+                      required: "password is required",
+                    })}
+                    name="password"
+                    placeholder="Password"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          size="small"
+                          aria-label="toggle password visibility"
+                          // onClick={() => handleClickShowPassword(1)}
+                          // onMouseDown={handleMouseDownPassword}
+                        >
+                          {/* {values.showPassword ? (
+                          <VisibilityOff
+                            className="text-[#D0D0D0]"
+                            fontSize="small"
+                          />
+                        ) : (
+
+                        )} */}
+                          <Visibility
+                            className="text-[#D0D0D0]"
+                            fontSize="small"
+                          />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    className=" bg-[#F0EFFF] rounded-lg  py-3 px-3"
+                  />
+
+                  <span className=" font-normal text-[#B0B0B0] text-sm text-end items-end py-2">
+                    Forgot password ?
+                  </span>
+                </FormControl>
+              </div>
+              <Button
+                type="submit"
+                style={{ boxShadow: "0 4px 61px 6px rgba(77, 71, 195, 0.4)" }}
+                className=" hover:bg-[#4D47C3] py-3 shadow-2xl mx-auto text-center bg-[#4D47C3] rounded-lg  text-[#FFFFFF] font-medium text-base min-w-full "
+                sx={{
+                  textTransform: "none",
+                }}
+              >
+                Login
+              </Button>
+              <span className=" flex flex-col gap-4 font-normal text-[#B0B0B0] text-sm text-center items-center py-2">
+                or continue with
+                <Image
+                  className=" mx-auto  cursor-pointer"
+                  height={41}
+                  width={41}
+                  alt="googleImg"
+                  src="/login/google.svg"
+                />
+              </span>
+            </form>
+          )}
         </div>
       </div>
     </>
