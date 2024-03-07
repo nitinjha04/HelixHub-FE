@@ -5,9 +5,11 @@ import { useState } from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const Sidebar = ({ children }) => {
+  const router = useRouter();
+
   const UserNavigation = [
     {
       index: 1,
@@ -47,7 +49,7 @@ const Sidebar = ({ children }) => {
           />
         </svg>
       ),
-      link: "/",
+      link: "/student",
     },
     {
       index: 3,
@@ -222,9 +224,9 @@ const Sidebar = ({ children }) => {
               openSidebar
                 ? "  translate-x-0 absolute lg:sticky"
                 : "-translate-x-full lg:translate-x-0  absolute lg:sticky"
-            } no-scrollbar min-h-[500px]  h-full overflow-y-auto  max-w-[289px] lg:min-w-full   left-0  lg:flex flex-col w-full justify-start items-center bg-[#4D44B5]`}
+            } z-50 no-scrollbar min-h-[500px]  h-full overflow-y-auto  max-w-[289px] lg:min-w-full   left-0  lg:flex flex-col w-full justify-start items-center bg-bgDefaultColor`}
           >
-            <Box className="  flex poppins-bold justify-around lg:mx-auto py-10 ">
+            <Box className="  flex poppins-bold justify-around lg:mx-auto py-4 ">
               <span className="text-2xl mx-auto lg:text-4xl flex text-[#FB7D5B]">
                 Helix <p className="text-white">-Hub</p>
               </span>
@@ -239,15 +241,18 @@ const Sidebar = ({ children }) => {
                 {UserNavigation.map((nav, index) => (
                   <Box
                     key={nav.index}
-                    onClick={() => handleNavClick(index)} // Handle click event
-                    className={` font-medium text-base min-h-[47px] pl-3 text-start rounded-l-2xl flex items-center w-full ${
-                      activeNav[index] ? "bg-[#F3F4FF] text-[#4D44B5]" : ""
+                    onClick={() => {
+                      router.push(nav.link);
+                      handleNavClick(index);
+                    }} // Handle click event
+                    className={` cursor-pointer hover:bg-[#F3F4FF] hover:text-bgDefaultColor font-medium text-base min-h-[47px] pl-3 text-start rounded-l-2xl flex items-center w-full ${
+                      activeNav[index] ? "bg-[#F3F4FF] text-bgDefaultColor" : ""
                     }`}
                   >
                     {nav.icons && (
                       <Box
                         className={`${
-                          activeNav[index] ? "text-[#4D44B5]" : ""
+                          activeNav[index] ? "text-bgDefaultColor" : ""
                         }`}
                       >
                         {nav.icons}
@@ -310,10 +315,12 @@ const Sidebar = ({ children }) => {
               </svg>
             </div>
           </Box>
-          <Box className="col-span-10 bg-white">{children}</Box>
+          <Box className=" bg-[#F3F4FF] col-span-12 overflow-auto no-scrollbar lg:col-span-10">
+            {children}
+          </Box>
         </Box>
       ) : (
-        <>{children}</>
+        <div className=" bg-[#F3F4FF]">{children}</div>
       )}
     </>
   );
