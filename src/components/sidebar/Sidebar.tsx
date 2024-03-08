@@ -1,13 +1,18 @@
 "use client";
 
 import { Box } from "@mui/material";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-const Sidebar = ({ children }) => {
+interface SidebarProps {
+  children: ReactNode;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const router = useRouter();
 
   const UserNavigation = [
@@ -69,7 +74,7 @@ const Sidebar = ({ children }) => {
           />
         </svg>
       ),
-      link: "/",
+      link: "/teacher",
     },
     {
       index: 4,
@@ -199,20 +204,6 @@ const Sidebar = ({ children }) => {
 
   const pathname = usePathname();
 
-  // Define state to track the active state of each navigation button
-  const [activeNav, setActiveNav] = useState(
-    Array(UserNavigation.length).fill(false)
-  );
-
-  // Function to handle click event on navigation buttons
-  const handleNavClick = (index: any) => {
-    setActiveNav((prevState) => {
-      const newState = Array(UserNavigation.length).fill(false); // Initialize all to false
-      newState[index] = true; // Set the clicked one to true
-      return newState;
-    });
-  };
-
   const [openSidebar, setOpenSidebar] = useState(false);
 
   return (
@@ -243,16 +234,17 @@ const Sidebar = ({ children }) => {
                     key={nav.index}
                     onClick={() => {
                       router.push(nav.link);
-                      handleNavClick(index);
                     }} // Handle click event
                     className={` cursor-pointer hover:bg-[#F3F4FF] hover:text-bgDefaultColor font-medium text-base min-h-[47px] pl-3 text-start rounded-l-2xl flex items-center w-full ${
-                      activeNav[index] ? "bg-[#F3F4FF] text-bgDefaultColor" : ""
+                      pathname === nav.link
+                        ? "bg-[#F3F4FF] text-bgDefaultColor"
+                        : ""
                     }`}
                   >
                     {nav.icons && (
                       <Box
                         className={`${
-                          activeNav[index] ? "text-bgDefaultColor" : ""
+                          pathname === nav.link ? "text-bgDefaultColor" : ""
                         }`}
                       >
                         {nav.icons}
@@ -263,7 +255,7 @@ const Sidebar = ({ children }) => {
                 ))}
               </Box>
               <Box className="pl-10 pt-5 flex poppins-bold items-center text-sm text-start w-full">
-                Helix-Hub - School Admission Dashboard
+                Helix-Hub - School Dashboard
               </Box>
               <Box className="pl-10 py-3 flex poppins-sm items-center text-sm text-start w-full">
                 Made with ♥ by nitin
@@ -315,7 +307,7 @@ const Sidebar = ({ children }) => {
               </svg>
             </div>
           </Box>
-          <Box className=" bg-[#F3F4FF] col-span-12 overflow-auto no-scrollbar lg:col-span-10">
+          <Box className="  bg-[#F3F4FF] col-span-12 overflow-auto no-scrollbar lg:col-span-10">
             {children}
           </Box>
         </Box>
