@@ -267,7 +267,7 @@ const StudentsPage = () => {
           </Button>
         </div>
       </div>
-      {/* <table className=" table-auto bg-white  rounded-[20px] h-full">
+      {/* <table className=" table-auto bg-white  rounded-default h-full">
         <tbody>
           <tr>
             <th>

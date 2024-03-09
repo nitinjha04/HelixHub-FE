@@ -302,7 +302,7 @@ const Teachers = () => {
         {dataToShow.map((data, index) => (
           <div
             key={index}
-            className=" relative col-span-12 md:col-span-6 lg:col-span-3 rounded-[20px] h-full w-full justify-center items-center py-6 flex flex-col gap-4 mx-auto my-auto  bg-white"
+            className=" relative col-span-12 md:col-span-6 lg:col-span-3 rounded-default h-full w-full justify-center items-center py-6 flex flex-col gap-4 mx-auto my-auto  bg-white"
           >
             <MoreHorizIcon
               sx={{

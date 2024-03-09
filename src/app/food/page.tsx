@@ -1,8 +1,26 @@
+"use client";
+import CustomPagination from "@/components/Pagination";
 import Header from "@/partials/Header";
 import { FormControl, Input } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
 const Foods = () => {
+  const demoData = [
+    {
+      name: "Beef Steak with Fried Potato",
+      rating: 4.9,
+      totalOrders: 1.456,
+    },
+  ];
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [dataToShow, setDataToShow] = useState<
+    {
+      name: string;
+      rating: Number;
+      totalOrders: Number;
+    }[]
+  >([]);
   return (
     <div className=" px-6 py-6 flex flex-col gap-6">
       <Header title={"Foods"}>
@@ -29,6 +47,14 @@ const Foods = () => {
           />
         </FormControl>
       </Header>
+
+      <CustomPagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        pageSize={5}
+        tableData={demoData}
+        setDataToShow={setDataToShow}
+      />
     </div>
   );
 };

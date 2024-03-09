@@ -281,7 +281,7 @@ export default function Admin() {
               />
             </FormControl>
           </div>
-          <div className="  py-8 h-full flex justify-around rounded-[20px] col-span-12 bg-[#FFFFFF]">
+          <div className="  py-8 h-full flex justify-around rounded-default col-span-12 bg-[#FFFFFF]">
             <div className=" flex flex-col lg:flex-row gap-5">
               <img
                 className=" w-10 h-10 mx-auto lg:mx-0 lg:h-16  lg:w-16 "
@@ -340,14 +340,14 @@ export default function Admin() {
             </div>
           </div>
         </div>
-        <div className=" row-span-9 rounded-[20px] col-span-12 bg-[#FFFFFF]">
+        <div className=" row-span-9 rounded-default col-span-12 bg-[#FFFFFF]">
           <LineChart />
         </div>
         <div className=" row-span-9 gap-7 grid grid-cols-12 col-span-12 ">
-          <div className="rounded-[20px] bg-[#FFFFFF] col-span-12 lg:col-span-6 "></div>
-          <div className="rounded-[20px] bg-[#FFFFFF] col-span-12 lg:col-span-6 "></div>
+          <div className="rounded-default bg-[#FFFFFF] col-span-12 lg:col-span-6 "></div>
+          <div className="rounded-default bg-[#FFFFFF] col-span-12 lg:col-span-6 "></div>
         </div>
-        <div className=" h-fit  flex flex-col py-5 overflow-auto no-scrollbar rounded-[20px] col-span-12 bg-[#FFFFFF]">
+        <div className=" h-fit  flex flex-col py-5 overflow-auto no-scrollbar rounded-default col-span-12 bg-[#FFFFFF]">
           <div className=" w-full flex flex-col gap-5 px-6">
             <span className=" font-bold text-defaultTextColor text-xl  ">
               Unpaid Student Intuition

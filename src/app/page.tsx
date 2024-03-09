@@ -86,9 +86,13 @@ export default function Home() {
               />
             </FormControl>
           </div>
-          <div className=" relative h-full flex flex-col justify-around rounded-[20px] col-span-12 bg-[#FFFFFF]">
+          <div className=" relative h-full flex flex-col justify-around rounded-default col-span-12 bg-[#FFFFFF]">
             <div className="absolute top-0 w-full h-31 rounded-t-[20px] bg-bgDefaultColor">
-              <img src="/profile/profileBG.svg" alt="profileBG" />
+              <img
+                className="float-right"
+                src="/profile/profileBG.svg"
+                alt="profileBG"
+              />
             </div>
             <div className=" flex flex-col pt-8 px-7 gap-3 justify-start items-start">
               <Avatar className=" w-28 h-28 border-8 border-white" />
@@ -120,7 +124,7 @@ export default function Home() {
           </div>
         </div>
         <div className=" row-span-9 gap-6 grid grid-cols-12 col-span-12 ">
-          <div className=" flex flex-col gap-8 w-full px-6 py-3 rounded-[20px] bg-[#FFFFFF] col-span-12 lg:col-span-6 ">
+          <div className=" flex flex-col gap-8 w-full px-6 py-3 rounded-default bg-[#FFFFFF] col-span-12 lg:col-span-6 ">
             <div className=" flex justify-between">
               <div className=" text-defaultTextColor flex flex-col gap-1 font-bold text-xl lg:text-2xl text ">
                 Contacts
@@ -182,7 +186,7 @@ export default function Home() {
               View More
             </Button>
           </div>
-          <div className="  flex flex-col gap-8 w-full px-6 py-3 rounded-[20px] bg-[#FFFFFF] col-span-12 lg:col-span-6 ">
+          <div className="  flex flex-col gap-8 w-full px-6 py-3 rounded-default bg-[#FFFFFF] col-span-12 lg:col-span-6 ">
             <div className=" text-defaultTextColor  font-bold text-xl lg:text-2xl ">
               Messages
             </div>

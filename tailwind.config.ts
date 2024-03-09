@@ -18,6 +18,10 @@ const config: Config = {
         defaultTextColor: "#303972",
         bgDefaultColor: "#4D44B5",
         smallTextColor: "#7D7D7D",
+        inputBoxColor: "#C1BBEB",
+      },
+      borderRadius: {
+        default: "20px", // Set your default border radius value here
       },
     },
   },
