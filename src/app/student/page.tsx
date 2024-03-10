@@ -7,8 +7,11 @@ import CustomPagination from "@/components/Pagination";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AddIcon from "@mui/icons-material/Add";
+import useAuthorization from "@/components/hooks/useAuthorization";
 
 const StudentsPage = () => {
+  const ProtectPage = useAuthorization(["Admin", "Teacher"]);
+
   const tableData = [
     {
       name: "Samanta William",
@@ -225,7 +228,7 @@ const StudentsPage = () => {
 
   return (
     <div className="px-6 py-6 flex flex-col gap-6">
-      <Header title={'Students'}/>
+      <Header title={"Students"} />
       <div className=" flex flex-col lg:flex-row gap-5 justify-between">
         <FormControl>
           <Input

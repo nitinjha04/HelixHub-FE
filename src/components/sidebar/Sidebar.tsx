@@ -1,12 +1,14 @@
 "use client";
 
 import { Box } from "@mui/material";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "../hooks/reduxHook";
+import { getCurrentUserAsync } from "@/store/actions/userAction";
 
 interface SidebarProps {
   children: ReactNode;
@@ -14,6 +16,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const UserNavigation = [
     {
@@ -205,6 +208,10 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const pathname = usePathname();
 
   const [openSidebar, setOpenSidebar] = useState(false);
+
+  useEffect(() => {
+    dispatch(getCurrentUserAsync());
+  }, [dispatch]);
 
   return (
     <>

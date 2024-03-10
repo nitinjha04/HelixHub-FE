@@ -9,8 +9,11 @@ import { useState } from "react";
 import CustomPagination from "@/components/Pagination";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Schedule from "@/components/schedule/Schedule";
+import useAuthorization from "@/components/hooks/useAuthorization";
 
 export default function StudentDetails() {
+  const ProtectPage = useAuthorization(["Admin", "Teacher"]);
+
   const demoData = [
     {
       id: 12345678,

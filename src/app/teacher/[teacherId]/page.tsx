@@ -10,8 +10,11 @@ import CustomPagination from "@/components/Pagination";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Schedule from "@/components/schedule/Schedule";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import useAuthorization from "@/components/hooks/useAuthorization";
 
 export default function TeacherDetails() {
+  const ProtectPage = useAuthorization(["Admin"]);
+
   const demoData = [
     {
       id: 12345678,

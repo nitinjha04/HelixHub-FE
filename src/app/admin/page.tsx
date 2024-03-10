@@ -14,8 +14,11 @@ import AddIcon from "@mui/icons-material/Add";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import CustomPagination from "@/components/Pagination";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import useAuthorization from "@/components/hooks/useAuthorization";
 
 export default function Admin() {
+  const ProtectPage = useAuthorization(["Admin"]);
+
   const router = useRouter();
 
   const { user, getCurrentUser } = useUserStore();

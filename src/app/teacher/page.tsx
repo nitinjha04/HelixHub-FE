@@ -8,8 +8,11 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import AddIcon from "@mui/icons-material/Add";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import useAuthorization from "@/components/hooks/useAuthorization";
 
 const Teachers = () => {
+  const ProtectPage = useAuthorization(["Admin"]);
+
   const demoData = [
     {
       name: "Dimitres Viga",

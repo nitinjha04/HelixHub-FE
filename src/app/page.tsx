@@ -1,10 +1,19 @@
+"use client";
 import { Avatar, Button, FormControl, Input } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import { useEffect } from "react";
+import { getCurrentUserAsync } from "@/store/actions/userAction";
+import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
+import { selectCurrentUserInfo } from "@/store/reducers/userReducer";
 
 export default function Home() {
+  const dispatch = useAppDispatch();
+
+  const currentUser = useAppSelector(selectCurrentUserInfo);
+  console.log("currentUser", currentUser);
   const demoData = [
     {
       name: "Samantha William",
