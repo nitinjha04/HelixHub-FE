@@ -2,6 +2,8 @@ import React, { ReactNode } from "react";
 import { Avatar } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
+import HeaderProfile from "@/components/HeaderProfile";
+
 
 interface HeaderProps {
   children?: ReactNode;
@@ -16,6 +18,8 @@ const Header: React.FC<HeaderProps> = ({ children, title }) => {
       </span>
       <div className=" h-fit flex gap-4">
         {children}
+        {/* <HeaderProfile /> */}
+
         <div className=" hidden gap-4 lg:flex">
           <NotificationsIcon className=" items-center my-auto" />
           <SettingsIcon className=" items-center my-auto" />

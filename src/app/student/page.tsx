@@ -2,14 +2,21 @@
 import Header from "@/partials/Header";
 import { Avatar, Button, FormControl, Input } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomPagination from "@/components/Pagination";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AddIcon from "@mui/icons-material/Add";
 import useAuthorization from "@/components/hooks/useAuthorization";
+import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
+import { selectAllUsers } from "@/store/reducers/userReducer";
+import { UserData } from "@/interface";
+import { getAllUsersAsync } from "@/store/actions/userAction";
 
 const StudentsPage = () => {
+  const dispatch = useAppDispatch();
+  const allUsers = useAppSelector(selectAllUsers);
+  console.log("allUsers", allUsers);
   const ProtectPage = useAuthorization(["Admin", "Teacher"]);
 
   const tableData = [
@@ -96,16 +103,7 @@ const StudentsPage = () => {
   ];
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [dataToShow, setDataToShow] = useState<
-    {
-      name: string;
-      id: Number;
-      createdAt: String;
-      parentName: String;
-      city: String;
-      grade: String;
-    }[]
-  >([]);
+  const [dataToShow, setDataToShow] = useState<UserData[]>([]);
 
   //for grade colour
 
@@ -212,19 +210,22 @@ const StudentsPage = () => {
     },
   ];
 
-  const rows = dataToShow.map((data) => ({
-    // checkbox: "",
-    name: data.name,
-    id: `#${data.id}`,
-    date: data.createdAt,
-    // createdAt: formatDate(data.createdAt),
-    parent: data.parentName,
-    city: data.city,
-    contact: "",
-    grade: data.grade,
-    action: "",
-    // actions: <MoreVertIcon />, // You can include this if you want actions
-  }));
+  const rows = dataToShow
+    ? dataToShow.map((data) => ({
+        name: data.name?.first || "",
+        id: `#${data._id}`,
+        date: data.createdAt,
+        parent: data.parentName?.first || "",
+        city: data.address,
+        contact: "",
+        grade: data.grade,
+        action: "",
+      }))
+    : [];
+
+  useEffect(() => {
+    dispatch(getAllUsersAsync());
+  }, [dispatch]);
 
   return (
     <div className="px-6 py-6 flex flex-col gap-6">
@@ -266,7 +267,7 @@ const StudentsPage = () => {
               textTransform: "none",
             }}
           >
-            <AddIcon /> New Teacher
+            <AddIcon /> New Student
           </Button>
         </div>
       </div>
@@ -342,7 +343,7 @@ const StudentsPage = () => {
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           pageSize={5}
-          tableData={tableData}
+          tableData={allUsers || []}
           setDataToShow={setDataToShow}
         />
       </div>

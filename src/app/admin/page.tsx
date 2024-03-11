@@ -15,6 +15,7 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import CustomPagination from "@/components/Pagination";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import useAuthorization from "@/components/hooks/useAuthorization";
+import HeaderProfile from "@/components/HeaderProfile";
 
 export default function Admin() {
   const ProtectPage = useAuthorization(["Admin"]);
@@ -242,15 +243,6 @@ export default function Admin() {
   }));
 
   useEffect(() => {
-    if (typeof window !== "undefined" && window.localStorage) {
-      const value = localStorage.getItem("helixhub-token");
-      if (!value) {
-        router.push("/login");
-      }
-    }
-  }, []);
-
-  useEffect(() => {
     getCurrentUser();
   }, []);
 
@@ -401,6 +393,7 @@ export default function Admin() {
         </div>
       </div>
       <div className="lg:flex bg-white overflow-auto no-scrollbar flex-col gap-8 px-6 py-6 hidden col-span-3 w-full">
+        {/* <HeaderProfile /> */}
         <div className=" h-fit flex  gap-6 justify-end w-full">
           <NotificationsIcon className=" items-center my-auto" />
           <SettingsIcon className=" items-center my-auto" />

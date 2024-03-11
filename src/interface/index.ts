@@ -10,10 +10,12 @@ export interface RegisterData extends LoginData {
 }
 
 export interface UserData {
+  _id: string;
   name?: {
     first?: string;
     last?: string;
   };
+  role?: string;
   dob?: string;
   pob?: string;
   phone?: number;
@@ -31,13 +33,15 @@ export interface UserData {
   degreeEndDate?: string;
   degree?: string;
   universityCity?: string;
+  createdAt?: string;
+  grade?: string;
 }
 
 export interface ErrorResponse {
   data: string; // Adjust the type according to your error response structure
 }
 
-export interface UpdateData {
+export interface UpdateData extends UserData {
   name?: {
     first?: string;
     last?: string;

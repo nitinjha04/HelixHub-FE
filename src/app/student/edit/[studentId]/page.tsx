@@ -1,16 +1,33 @@
 "use client";
-import { useAppSelector } from "@/components/hooks/reduxHook";
+import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import UserForm from "@/components/user-form";
 import { UpdateData } from "@/interface";
+import { updateUserAsync } from "@/store/actions/userAction";
 import { selectCurrentUserInfo } from "@/store/reducers/userReducer";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const EditStudent = () => {
+  const currentUser = useAppSelector(selectCurrentUserInfo);
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<UpdateData | null>(null);
 
   const handleFormSubmit = (data: UpdateData) => {
     setFormData(data);
+    if (!formData) {
+      console.error("Form data is null");
+      return; // Return early if formData is null
+    }
+    if (currentUser) {
+      dispatch(
+        updateUserAsync({
+          id: currentUser._id,
+          updateData: formData,
+        })
+      );
+    } else {
+      console.log("current user is undefined");
+    }
     // You can perform any additional actions with the form data here
     console.log("Form data submitted:", data);
   };
@@ -37,7 +54,6 @@ const EditStudent = () => {
     degree: "Bachelor of Science",
     universityCity: "Anytown",
   };
-  const currentUser = useAppSelector(selectCurrentUserInfo);
 
   return (
     <>

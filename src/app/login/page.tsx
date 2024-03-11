@@ -13,12 +13,17 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "@/store/auth.store";
 import { LoginData, RegisterData } from "@/interface";
+import { toast } from "react-toastify";
+import authService from "@/services/auth.service";
+import TokenHelper from "@/helpers/Token.helper";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
   const [registerCard, setRegisterCard] = useState(false);
 
-  const { login: handleLogin } = useAuthStore();
-  const { register: handleRegister } = useAuthStore();
+  // const { login: handleLogin } = useAuthStore();
+  // const { register: handleRegister } = useAuthStore();
 
   const {
     register: registerLogin,
@@ -34,8 +39,32 @@ const Login = () => {
     formState: { errors: registerError },
   } = useForm<RegisterData>();
 
-
-  
+  const handleLogin = async (data: LoginData) => {
+    try {
+      const response = await authService.login(data);
+      const token = response?.data?.result?.accessToken;
+      if (token) {
+        TokenHelper.create(token);
+        router.push("/");
+        console.log("token", token);
+      }
+    } catch (error) {
+      toast.error("An error Occurred");
+    }
+  };
+  const handleRegister = async (data: RegisterData) => {
+    try {
+      const response = await authService.register(data);
+      const token = response?.data?.result?.accessToken;
+      if (token) {
+        TokenHelper.create(token);
+        router.push("/");
+        console.log("token", token);
+      }
+    } catch (error) {
+      toast.error("An error Occurred");
+    }
+  };
 
   return (
     <>
@@ -221,7 +250,6 @@ const Login = () => {
           ) : (
             <form
               onSubmit={loginSubmit((data) => {
-
                 handleLogin({ email: data.email, password: data.password });
               })}
               className="max-w-[369px] min-w-[322px] gap-9 flex flex-col mx-auto"

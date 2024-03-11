@@ -7,8 +7,9 @@ import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "../hooks/reduxHook";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHook";
 import { getCurrentUserAsync } from "@/store/actions/userAction";
+import { selectCurrentUserInfo } from "@/store/reducers/userReducer";
 
 interface SidebarProps {
   children: ReactNode;
@@ -17,6 +18,8 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const currentUser = useAppSelector(selectCurrentUserInfo);
+
 
   const UserNavigation = [
     {
@@ -212,6 +215,12 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   useEffect(() => {
     dispatch(getCurrentUserAsync());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!!currentUser) {
+      router.push("/login");
+    }
+  }, []);
 
   return (
     <>

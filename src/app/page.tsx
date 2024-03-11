@@ -13,6 +13,7 @@ export default function Home() {
   const dispatch = useAppDispatch();
 
   const currentUser = useAppSelector(selectCurrentUserInfo);
+  
   console.log("currentUser", currentUser);
   const demoData = [
     {
@@ -95,42 +96,45 @@ export default function Home() {
               />
             </FormControl>
           </div>
-          <div className=" relative h-full flex flex-col justify-around rounded-default col-span-12 bg-[#FFFFFF]">
-            <div className="absolute top-0 w-full h-31 rounded-t-[20px] bg-bgDefaultColor">
-              <img
-                className="float-right"
-                src="/profile/profileBG.svg"
-                alt="profileBG"
-              />
-            </div>
-            <div className=" flex flex-col pt-8 px-7 gap-3 justify-start items-start">
-              <Avatar className=" w-28 h-28 border-8 border-white" />
-              <span className="text-defaultTextColor font-bold text-xl lg:text-3xl">
-                Nabila Azalea
-              </span>
-            </div>
-            <div className="hidden lg:flex pb-3 px-7 gap-24 ">
-              <div className=" flex flex-col gap-3 text-defaultTextColor font-semibold text-lg">
-                Admin
-                <span className=" font-normal text-lg text-smallTextColor">
-                  Jakarta, Indonesia
+          {currentUser && (
+            <div className=" relative h-full flex flex-col justify-around rounded-default col-span-12 bg-[#FFFFFF]">
+              <div className="absolute top-0 w-full h-31 rounded-t-[20px] bg-bgDefaultColor">
+                <img
+                  className="float-right"
+                  src="/profile/profileBG.svg"
+                  alt="profileBG"
+                />
+              </div>
+              <div className=" flex flex-col pt-8 px-7 gap-3 justify-start items-start">
+                <Avatar className=" w-28 h-28 border-8 border-white" />
+                <span className="text-defaultTextColor font-bold text-xl lg:text-3xl">
+                  {currentUser?.name?.first} {currentUser?.name?.last}
                 </span>
               </div>
-              <div className="  flex flex-col gap-3 font-normal text-lg text-smallTextColor">
-                Phone
-                <span className=" text-defaultTextColor font-semibold text-lg">
-                  +91 93 1017 6922
-                </span>
-              </div>
-              <div className=" flex flex-col gap-3  font-normal text-lg text-smallTextColor">
-                Email
-                <span className=" text-defaultTextColor font-semibold text-lg">
-                  {" "}
-                  nitinjha890@gmail.com
-                </span>
+              <div className="hidden lg:flex py-2 pb-3 px-7 gap-24 ">
+                <div className=" flex flex-col gap-3 text-defaultTextColor font-semibold text-lg">
+                  {currentUser.role}
+                  <span className=" font-normal text-lg text-smallTextColor">
+                    {currentUser.address}
+                  </span>
+                </div>
+                <div className="  flex flex-col gap-3 font-normal text-lg text-smallTextColor">
+                  Phone
+                  <span className=" text-defaultTextColor font-semibold text-lg">
+                    +{currentUser?.phone?.toString().slice(0, 2)}{" "}
+                    {currentUser?.phone?.toString().slice(2)}
+                  </span>
+                </div>
+                <div className=" flex flex-col gap-3  font-normal text-lg text-smallTextColor">
+                  Email
+                  <span className=" text-defaultTextColor font-semibold text-lg">
+                    {" "}
+                    {currentUser.email}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
         <div className=" row-span-9 gap-6 grid grid-cols-12 col-span-12 ">
           <div className=" flex flex-col gap-8 w-full px-6 py-3 rounded-default bg-[#FFFFFF] col-span-12 lg:col-span-6 ">
@@ -256,15 +260,17 @@ export default function Home() {
         <div className=" h-fit flex gap-6 justify-end w-full">
           <NotificationsIcon className=" items-center my-auto" />
           <SettingsIcon className=" items-center my-auto" />
-          <div className=" flex gap-4 ">
-            <span className=" text-defaultTextColor font-normal text-sm">
-              Nabila A.
-              <p className=" text-end items-end text-smallTextColor   ">
-                Admin
-              </p>
-            </span>
-            <Avatar />
-          </div>
+          {currentUser && (
+            <div className=" flex gap-4 ">
+              <span className=" text-defaultTextColor font-normal text-sm">
+                {currentUser.name?.first}.
+                <p className=" text-end items-end text-smallTextColor   ">
+                  {currentUser.role}
+                </p>
+              </span>
+              <Avatar />
+            </div>
+          )}
         </div>
       </div>
     </div>
