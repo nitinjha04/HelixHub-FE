@@ -6,13 +6,20 @@ import AddIcon from "@mui/icons-material/Add";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Header from "@/partials/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomPagination from "@/components/Pagination";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Schedule from "@/components/schedule/Schedule";
 import useAuthorization from "@/components/hooks/useAuthorization";
+import { useParams } from "next/navigation";
+import { selectUserDetail } from "@/store/reducers/userReducer";
+import { getUserDetailsAsync } from "@/store/actions/userAction";
+import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 
 export default function StudentDetails() {
+  const params = useParams();
+  const dispatch = useAppDispatch();
+  const userDetail = useAppSelector(selectUserDetail);
   const ProtectPage = useAuthorization(["Admin", "Teacher"]);
 
   const demoData = [
@@ -113,6 +120,11 @@ export default function StudentDetails() {
     { date: string; id: Number; status: String; payment: Number }[]
   >([]);
 
+  useEffect(() => {
+    const studentId = params.studentId.toString();
+    dispatch(getUserDetailsAsync(studentId));
+  }, [dispatch]);
+
   return (
     <div className=" grid grid-cols-12  px-6  h-full w-full  gap-6">
       <div className=" py-6 col-span-12">
@@ -141,111 +153,116 @@ export default function StudentDetails() {
           </FormControl>
         </Header>
       </div>
-      <div className=" grid h-full overflow-auto no-scrollbar grid-cols-12 col-span-12 lg:col-span-9   pb-6  gap-6 w-full ">
-        <div className=" relative h-full flex flex-col justify-around rounded-default col-span-12 bg-[#FFFFFF]">
-          <div className="absolute top-0 w-full h-24 rounded-t-[20px] bg-bgDefaultColor">
-            <img
-              src="/profile/profileBG.svg"
-              alt="profileBG"
-              className=" h-24 float-end "
-            />
-          </div>
-          <div className=" relative flex flex-col pt-8 px-7 gap-3 justify-start items-start">
-            <Avatar className=" w-28 h-28 border-8 border-white" />
-            <MoreHorizIcon className=" absolute right-0 bottom-1/2 " />
+      {userDetail && (
+        <>
+          <div className=" grid h-full overflow-auto no-scrollbar grid-cols-12 col-span-12 lg:col-span-9   pb-6  gap-6 w-full ">
+            <div className=" relative h-full flex flex-col justify-around rounded-default col-span-12 bg-[#FFFFFF]">
+              <div className="absolute top-0 w-full h-24 rounded-t-[20px] bg-bgDefaultColor">
+                <img
+                  src="/profile/profileBG.svg"
+                  alt="profileBG"
+                  className=" h-24 float-end "
+                />
+              </div>
+              <div className=" relative flex flex-col pt-8 px-7 gap-3 justify-start items-start">
+                <Avatar className=" w-28 h-28 border-8 border-white" />
+                <MoreHorizIcon className=" absolute right-0 bottom-1/2 " />
 
-            <span className="text-defaultTextColor font-bold text-xl lg:text-3xl">
-              Nabila Azalea
-              <p className=" text-smallTextColor font-semibold text-lg">
-                Student
-              </p>
-            </span>
-          </div>
-          <div className=" flex py-5 px-4 lg:px-0 w-full  ">
-            <div className="flex flex-col md:flex-col lg:flex-row lg:justify-evenly w-full">
-              <div className="  flex flex-col gap-3 font-normal text-sm lg:text-lg text-smallTextColor">
-                Parents:
-                <span className=" text-defaultTextColor font-semibold text-sm lg:text-lg">
-                  Justin Hope
+                <span className="text-defaultTextColor font-bold text-xl lg:text-3xl">
+                  {userDetail.name?.first} {userDetail.name?.last}
+                  <p className=" text-smallTextColor font-semibold text-lg">
+                    {userDetail.role}
+                  </p>
                 </span>
               </div>
-              <div className="  flex flex-col gap-3 font-normal text-sm lg:text-lg text-smallTextColor">
-                Address
-                <span className=" text-defaultTextColor font-semibold text-sm lg:text-lg">
-                  Jakarta, Indonesia
-                </span>
+              <div className=" flex py-5 px-4 lg:px-0 w-full  ">
+                <div className="flex flex-col md:flex-col lg:flex-row lg:justify-evenly w-full">
+                  <div className="  flex flex-col gap-3 font-normal text-sm lg:text-lg text-smallTextColor">
+                    Parents:
+                    <span className=" text-defaultTextColor font-semibold text-sm lg:text-lg">
+                      {userDetail.parentName?.first}
+                    </span>
+                  </div>
+                  <div className="  flex flex-col gap-3 font-normal text-sm lg:text-lg text-smallTextColor">
+                    Address
+                    <span className=" text-defaultTextColor font-semibold text-sm lg:text-lg">
+                      {/* LATER */}
+                      Jakarta, Indonesia
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col md:flex-col lg:flex-row flex-wrap lg:justify-evenly w-full">
+                  <div className="  flex flex-col gap-3 font-normal text-sm lg:text-lg text-smallTextColor">
+                    Phone
+                    <span className=" text-defaultTextColor font-semibold text-sm lg:text-lg">
+                      {userDetail.phone}
+                    </span>
+                  </div>
+                  <div className=" flex flex-col gap-3  font-normal text-sm lg:text-lg text-smallTextColor">
+                    Email
+                    <span className=" text-defaultTextColor font-semibold text-sm lg:text-lg">
+                      {" "}
+                      {userDetail.email}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="flex flex-col md:flex-col lg:flex-row flex-wrap lg:justify-evenly w-full">
-              <div className="  flex flex-col gap-3 font-normal text-sm lg:text-lg text-smallTextColor">
-                Phone
-                <span className=" text-defaultTextColor font-semibold text-sm lg:text-lg">
-                  +91 93 1017 6922
+            <div className=" rounded-default bg-white flex flex-col  px-6 py-5 row-span-9 col-span-12 ">
+              <div className=" w-full flex flex-col gap-5  ">
+                <span className=" font-bold text-defaultTextColor text-xl  ">
+                  Payment History
                 </span>
               </div>
-              <div className=" flex flex-col gap-3  font-normal text-sm lg:text-lg text-smallTextColor">
-                Email
-                <span className=" text-defaultTextColor font-semibold text-sm lg:text-lg">
-                  {" "}
-                  nitinjha890@gmail.com
-                </span>
+              <div className=" overflow-auto">
+                <table className=" min-w-[600px] w-full pt-3 table-auto overflow-auto no-scrollbar">
+                  <tbody className=" table-auto overflow-auto ">
+                    {dataToShow.map((data) => (
+                      <tr>
+                        <th className=" flex gap-3 my-auto py-6  font-semibold text-lg text-defaultTextColor">
+                          <span className="text-white bg-[#FF4550] rounded-full h-10 w-10 p-2 flex justify-center items-center ">
+                            <TrendingUpIcon />
+                          </span>
+                          <p className=" my-auto">#{data.id.toString()}</p>
+                        </th>
+                        <th className=" py-6 font-normal text-sm text-smallTextColor">
+                          {data.date}
+                        </th>
+                        <th className="  py-6 text-start item-start  font-semibold text-lg text-defaultTextColor">
+                          <span className=" flex gap-1">
+                            {" "}
+                            <p>$</p>
+                            {data.payment.toString()}
+                          </span>
+                        </th>
+                        <th
+                          className={`${
+                            data.status === "Complete"
+                              ? " text-[#4CBC9A] "
+                              : data.status === "Canceled"
+                              ? "text-[#A098AE]"
+                              : "text-[#FF4550]"
+                          } py-6  items-start text-start font-semibold text-lg`}
+                        >
+                          {data.status}
+                        </th>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
+              <CustomPagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                pageSize={4}
+                tableData={demoData}
+                setDataToShow={setDataToShow}
+              />
             </div>
           </div>
-        </div>
-        <div className=" rounded-default bg-white flex flex-col  px-6 py-5 row-span-9 col-span-12 ">
-          <div className=" w-full flex flex-col gap-5  ">
-            <span className=" font-bold text-defaultTextColor text-xl  ">
-              Payment History
-            </span>
-          </div>
-          <div className=" overflow-auto">
-            <table className=" min-w-[600px] w-full pt-3 table-auto overflow-auto no-scrollbar">
-              <tbody className=" table-auto overflow-auto ">
-                {dataToShow.map((data) => (
-                  <tr>
-                    <th className=" flex gap-3 my-auto py-6  font-semibold text-lg text-defaultTextColor">
-                      <span className="text-white bg-[#FF4550] rounded-full h-10 w-10 p-2 flex justify-center items-center ">
-                        <TrendingUpIcon />
-                      </span>
-                      <p className=" my-auto">#{data.id.toString()}</p>
-                    </th>
-                    <th className=" py-6 font-normal text-sm text-smallTextColor">
-                      {data.date}
-                    </th>
-                    <th className="  py-6 text-start item-start  font-semibold text-lg text-defaultTextColor">
-                      <span className=" flex gap-1">
-                        {" "}
-                        <p>$</p>
-                        {data.payment.toString()}
-                      </span>
-                    </th>
-                    <th
-                      className={`${
-                        data.status === "Complete"
-                          ? " text-[#4CBC9A] "
-                          : data.status === "Canceled"
-                          ? "text-[#A098AE]"
-                          : "text-[#FF4550]"
-                      } py-6  items-start text-start font-semibold text-lg`}
-                    >
-                      {data.status}
-                    </th>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <CustomPagination
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            pageSize={4}
-            tableData={demoData}
-            setDataToShow={setDataToShow}
-          />
-        </div>
-      </div>
-      <Schedule />
+          <Schedule />
+        </>
+      )}
     </div>
   );
 }

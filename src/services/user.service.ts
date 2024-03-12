@@ -1,5 +1,5 @@
 import httpservice from "@/config/httpservice";
-import { UpdateData } from "@/interface";
+import { UpdateData, UserData } from "@/interface";
 
 class UserService {
   getAllUsers = async () => {
@@ -15,6 +15,26 @@ class UserService {
   getCurrentUser = async () => {
     try {
       const response = await httpservice.get("api/user/own");
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+  getUserDetail = async (id: string) => {
+    try {
+      const response = await httpservice.get(`api/user/${id}`);
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+  createUserWithoutPassword = async (userData: UserData) => {
+    try {
+      const response = await httpservice.post(`api/user/createUser`, {
+        ...userData,
+      });
       return response;
     } catch (error) {
       console.log(error);

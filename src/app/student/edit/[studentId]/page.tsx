@@ -2,13 +2,19 @@
 import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import UserForm from "@/components/user-form";
 import { UpdateData } from "@/interface";
-import { updateUserAsync } from "@/store/actions/userAction";
-import { selectCurrentUserInfo } from "@/store/reducers/userReducer";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import {
+  getUserDetailsAsync,
+  updateUserAsync,
+} from "@/store/actions/userAction";
+import {
+  selectUserDetail,
+} from "@/store/reducers/userReducer";
+import { useParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const EditStudent = () => {
-  const currentUser = useAppSelector(selectCurrentUserInfo);
+  const params = useParams();
+  const userDetail = useAppSelector(selectUserDetail);
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<UpdateData | null>(null);
 
@@ -16,56 +22,35 @@ const EditStudent = () => {
     setFormData(data);
     if (!formData) {
       console.error("Form data is null");
-      return; // Return early if formData is null
+      return;
     }
-    if (currentUser) {
+    if (userDetail) {
       dispatch(
         updateUserAsync({
-          id: currentUser._id,
+          id: userDetail._id,
           updateData: formData,
         })
       );
     } else {
       console.log("current user is undefined");
     }
-    // You can perform any additional actions with the form data here
     console.log("Form data submitted:", data);
   };
-  const demoData = {
-    name: {
-      first: "John",
-      last: "Doe",
-    },
-    dob: "1990-01-01",
-    pob: "New York",
-    phone: 1234567890,
-    email: "john.doe@example.com",
-    address: "123 Main St",
-    parentName: {
-      first: "Jane",
-      last: "Doe",
-    },
-    parentEmail: "jane.doe@example.com",
-    parentPhone: "0987654321",
-    parentAddress: "456 Elm St",
-    university: "Example University",
-    degreeStartDate: "2010-09-01",
-    degreeEndDate: "2014-06-30",
-    degree: "Bachelor of Science",
-    universityCity: "Anytown",
-  };
+
+  useEffect(() => {
+    const studentId = params.studentId.toString();
+    dispatch(getUserDetailsAsync(studentId));
+  }, [dispatch]);
 
   return (
     <>
-      {currentUser && (
+      {userDetail && (
         <UserForm
-          initialData={currentUser}
+          initialData={userDetail}
           title="Edit Student"
           subHeader="Parent Details"
           onSubmit={handleFormSubmit}
           student={false}
-          // register={register}
-          // handleSubmit={handleSubmit}
         />
       )}
     </>

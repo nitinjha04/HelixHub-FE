@@ -13,7 +13,17 @@ export const getAllUsersAsync = createAsyncThunk<UserData[], void>(
     }
   }
 );
-
+export const getUserDetailsAsync = createAsyncThunk<UserData, string>(
+  "user/userDetail",
+  async (id) => {
+    try {
+      const response = await userService.getUserDetail(id);
+      return response.data.result;
+    } catch (error) {
+      console.log("error occurred", error);
+    }
+  }
+);
 export const getCurrentUserAsync = createAsyncThunk<UserData>(
   "user/currentUser",
   async () => {

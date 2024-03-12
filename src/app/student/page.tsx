@@ -1,6 +1,14 @@
 "use client";
 import Header from "@/partials/Header";
-import { Avatar, Button, FormControl, Input } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  FormControl,
+  IconButton,
+  Input,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import React, { useEffect, useState } from "react";
 import CustomPagination from "@/components/Pagination";
@@ -12,10 +20,21 @@ import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import { selectAllUsers } from "@/store/reducers/userReducer";
 import { UserData } from "@/interface";
 import { getAllUsersAsync } from "@/store/actions/userAction";
+import { useRouter } from "next/navigation";
 
 const StudentsPage = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const allUsers = useAppSelector(selectAllUsers);
+
+  // for moreIcon
+  const [more, setMore] = useState<null | HTMLElement>(null);
+  const moreOpen = Boolean(more);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setMore(event.currentTarget);
+  };
+
   console.log("allUsers", allUsers);
   const ProtectPage = useAuthorization(["Admin", "Teacher"]);
 
@@ -102,8 +121,11 @@ const StudentsPage = () => {
     },
   ];
 
+  // for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [dataToShow, setDataToShow] = useState<UserData[]>([]);
+  const [search, setSearch] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState<UserData[]>([]);
 
   //for grade colour
 
@@ -125,14 +147,21 @@ const StudentsPage = () => {
       minWidth: 246,
       flex: 2,
       disableColumnMenu: true,
-      renderCell: (params) => (
-        <div className="flex gap-4">
-          <Avatar />
-          <p className="  my-auto font-bold text-lg text-defaultTextColor">
-            {params.value}
-          </p>
-        </div>
-      ),
+      renderCell: (params) => {
+        return (
+          <div
+            className="flex gap-4 cursor-pointer"
+            onClick={() =>
+              router.push(`/student/${params.id.toString().replace("#", "")}`)
+            }
+          >
+            <Avatar />
+            <p className="  my-auto font-bold text-lg text-defaultTextColor">
+              {params.value}
+            </p>
+          </div>
+        );
+      },
     },
     {
       field: "id",
@@ -204,7 +233,36 @@ const StudentsPage = () => {
       disableColumnMenu: true,
       renderCell: (params) => (
         <div>
-          <MoreHorizIcon className=" text-smallTextColor " />
+          <IconButton
+            onClick={(event: React.MouseEvent<HTMLElement>) => {
+              setMore(event.currentTarget);
+            }}
+          >
+            <MoreHorizIcon className=" text-smallTextColor " />
+          </IconButton>
+          <Menu
+            elevation={1}
+            id="demo-positioned-menu"
+            aria-labelledby="demo-positioned-button"
+            anchorEl={more}
+            open={moreOpen}
+            onClose={() => setMore(null)}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+          >
+            <MenuItem
+              onClick={() => router.push(`student/edit/${params.value}`)}
+            >
+              Edit
+            </MenuItem>
+            <MenuItem>Delete</MenuItem>
+          </Menu>
         </div>
       ),
     },
@@ -212,16 +270,31 @@ const StudentsPage = () => {
 
   const rows = dataToShow
     ? dataToShow.map((data) => ({
-        name: data.name?.first || "",
+        name: `${data.name?.first} ${data.name?.last}` || "",
         id: `#${data._id}`,
-        date: data.createdAt,
+        date:
+          data.createdAt &&
+          new Date(data.createdAt).toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          }),
         parent: data.parentName?.first || "",
         city: data.address,
         contact: "",
         grade: data.grade,
-        action: "",
+        action: data._id,
       }))
     : [];
+
+  useEffect(() => {
+    if (allUsers) {
+      const filtered = allUsers.filter((user) =>
+        user?.name?.first?.toLowerCase().includes(search.toLowerCase())
+      );
+      setFilteredUsers(filtered);
+    }
+  }, [allUsers, search]);
 
   useEffect(() => {
     dispatch(getAllUsersAsync());
@@ -233,6 +306,8 @@ const StudentsPage = () => {
       <div className=" flex flex-col lg:flex-row gap-5 justify-between">
         <FormControl>
           <Input
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
             disableUnderline
             placeholder="Search here..."
             className=" bg-white rounded-[40px] px-3 py-1"
@@ -262,6 +337,7 @@ const StudentsPage = () => {
             Newest <ArrowDropDownIcon />
           </Button>
           <Button
+            onClick={() => router.push("/student/create")}
             className=" py-1 px-8 whitespace-nowrap text-center items-center bg-bgDefaultColor w-full rounded-[40px] text-white  font-normal text-lg  "
             sx={{
               textTransform: "none",
@@ -343,7 +419,7 @@ const StudentsPage = () => {
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           pageSize={5}
-          tableData={allUsers || []}
+          tableData={filteredUsers || []}
           setDataToShow={setDataToShow}
         />
       </div>

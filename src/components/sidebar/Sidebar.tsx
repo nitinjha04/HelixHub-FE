@@ -20,7 +20,6 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(selectCurrentUserInfo);
 
-
   const UserNavigation = [
     {
       index: 1,
@@ -249,7 +248,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   <Box
                     key={nav.index}
                     onClick={() => {
-                      router.push(nav.link);
+                      window.location.href = nav.link;
                     }} // Handle click event
                     className={` cursor-pointer hover:bg-[#F3F4FF] hover:text-bgDefaultColor font-medium text-base min-h-[47px] pl-3 text-start rounded-l-2xl flex items-center w-full ${
                       pathname === nav.link
