@@ -1,4 +1,4 @@
-import { UpdateData } from "@/interface";
+import { UserData } from "@/interface";
 import {
   Button,
   FormControl,
@@ -18,11 +18,8 @@ interface UserForm {
   title: string;
   subHeader: string;
   student?: Boolean;
-  initialData?: UpdateData;
-  onSubmit: (data: UpdateData) => void;
-  // register: UseFormRegister<UpdateData>;
-  // handleSubmit: SubmitHandler<UpdateData>;
-  // onSubmit: (data: UpdateData) => void;
+  initialData?: UserData;
+  onSubmit: (data: UserData) => void;
 }
 
 const UserForm: FC<UserForm> = ({
@@ -34,35 +31,10 @@ const UserForm: FC<UserForm> = ({
   // register,
   // handleSubmit,
 }) => {
-  const { register, handleSubmit, reset } = useForm<UpdateData>();
-  //   {
-  //   defaultValues: {
-  //     name: {
-  //       first: "",
-  //       last: "",
-  //     },
-  //     dob: "",
-  //     pob: "",
-  //     phone: 0,
-  //     email: "",
-  //     address: "",
-  //     parentName: {
-  //       first: "",
-  //       last: "",
-  //     },
-  //     parentEmail: "",
-  //     parentPhone: "",
-  //     parentAddress: "",
-  //     university: "",
-  //     degreeStartDate: "",
-  //     degreeEndDate: "",
-  //     degree: "",
-  //     universityCity: "",
-  //   },
-  // }
+  const { register, handleSubmit, reset } = useForm<UserData>();
 
-  const onSubmitForm: SubmitHandler<UpdateData> = (data) => {
-    onSubmit(data); // Pass form data to the parent component
+  const onSubmitForm: SubmitHandler<UserData> = (data) => {
+    onSubmit(data);
   };
 
   useEffect(() => {
@@ -70,8 +42,6 @@ const UserForm: FC<UserForm> = ({
       reset(initialData);
     }
   }, [initialData, reset]);
-
-  // const onSubmit: SubmitHandler<UpdateData> = (data) => console.log(data);
 
   return (
     <form
@@ -184,8 +154,8 @@ const UserForm: FC<UserForm> = ({
                 />
               </FormControl>
             </div>
-            <div className="w-full lg:w-1/2 h-full flex flex-col lg:flex-row gap-5">
-              <FormControl className="w-full h-full">
+            <div className="w-full h-full flex flex-col lg:flex-row gap-5">
+              <FormControl className="w-full  h-full">
                 <FormLabel className=" text-defaultTextColor text-lg font-semibold">
                   Address *
                 </FormLabel>
@@ -197,7 +167,7 @@ const UserForm: FC<UserForm> = ({
                   multiline
                   name="address"
                   placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
-                  className=" h-full py-1 border-[1px] px-3  border-inputBoxColor rounded-md"
+                  className="  h-full py-1 border-[1px] px-3  border-inputBoxColor rounded-md"
                   required
                   disableUnderline
                 />
@@ -205,6 +175,28 @@ const UserForm: FC<UserForm> = ({
                   0/2000
                 </FormHelperText>
               </FormControl>
+              {student && (
+                <div className=" w-full">
+                  <FormControl className="w-full lg:w-1/2 h-fit">
+                    <FormLabel className=" text-defaultTextColor text-lg font-semibold">
+                      Grade *
+                    </FormLabel>
+                    <Input
+                      {...register("grade", {
+                        required: "Grade is required",
+                      })}
+                      name="grade"
+                      placeholder="VII"
+                      className="  h-full py-1 border-[1px] px-3  border-inputBoxColor rounded-md"
+                      required
+                      disableUnderline
+                    />
+                    <FormHelperText className="flex justify-start pr-4 items-start w-full font-normal text-xs text-inputBoxColor">
+                      In Roman Numbers
+                    </FormHelperText>
+                  </FormControl>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -311,7 +303,7 @@ const ParentDetails: FC<{ register: any }> = ({ register }) => {
         </FormControl>
       </div>
       <div className="w-full lg:w-1/2 h-full flex flex-col lg:flex-row gap-5">
-        <FormControl className="w-full h-full">
+        <FormControl className="w-full h-full pr-3">
           <FormLabel className=" text-defaultTextColor text-lg font-semibold">
             Address *
           </FormLabel>
@@ -345,10 +337,10 @@ const EducationDetails: FC<{ register: any }> = ({ register }) => {
             University *
           </FormLabel>
           <Input
-            {...register("university", {
-              required: "university is required",
+            {...register("education[0].university", {
+              required: "education[0].university is required",
             })}
-            name="university"
+            name="education[0].university"
             placeholder="HelixHub"
             className="py-1 border-[1px] px-3 border-inputBoxColor rounded-md"
             required
@@ -360,10 +352,10 @@ const EducationDetails: FC<{ register: any }> = ({ register }) => {
             Degree *
           </FormLabel>
           <Input
-            {...register("degree", {
-              required: "degree is required",
+            {...register("education[0].degree", {
+              required: "education[0].degree is required",
             })}
-            name="degree"
+            name="education[0].degree"
             placeholder="History Major"
             className="py-1 border-[1px] px-3 border-inputBoxColor rounded-md"
             required
@@ -374,15 +366,15 @@ const EducationDetails: FC<{ register: any }> = ({ register }) => {
       <div className=" w-full flex flex-col lg:flex-row gap-5">
         <div className="w-full flex flex-col  gap-4">
           <FormLabel className=" text-defaultTextColor text-lg font-semibold">
-            Start & End Date*
+            Start & End Date *
           </FormLabel>
           <div className=" w-full flex flex-col lg:flex-row gap-5">
             <FormControl className="w-full">
               <Input
-                {...register("degreeStartDate", {
-                  required: "degreeStartDate is required",
+                {...register("education[0].degreeStartDate", {
+                  required: "education[0].degreeStartDate is required",
                 })}
-                name="degreeStartDate"
+                name="education[0].degreeStartDate"
                 placeholder="February 2013"
                 className="py-1 border-[1px] px-3 border-inputBoxColor rounded-md"
                 required
@@ -391,10 +383,10 @@ const EducationDetails: FC<{ register: any }> = ({ register }) => {
             </FormControl>
             <FormControl className="w-full mt-auto">
               <Input
-                {...register("degreeEndDate", {
-                  required: "degreeEndDate is required",
+                {...register("education[0].degreeEndDate", {
+                  required: "education[0].degreeEndDate is required",
                 })}
-                name="degreeEndDate"
+                name="education[0].degreeEndDate"
                 placeholder="September 2018"
                 className="py-1 border-[1px] px-3 border-inputBoxColor rounded-md"
                 required
@@ -408,15 +400,69 @@ const EducationDetails: FC<{ register: any }> = ({ register }) => {
             City *
           </FormLabel>
           <Input
-            {...register("universityCity", {
-              required: "universityCity is required",
+            {...register("education[0].universityCity", {
+              required: "education[0].universityCity is required",
             })}
-            name="universityCity"
+            name="education[0].universityCity"
             placeholder="Shiganshina"
             className="py-1 border-[1px] px-3 border-inputBoxColor rounded-md"
             required
             disableUnderline
           />
+        </FormControl>
+      </div>
+      <div className=" w-full flex flex-col lg:flex-row gap-5">
+        <FormControl className="w-full ">
+          <FormLabel className=" text-defaultTextColor text-lg font-semibold">
+            Subject *
+          </FormLabel>
+          <Input
+            {...register("subject", {
+              required: "Subject is required",
+            })}
+            name="subject"
+            placeholder="Science"
+            className="py-1 border-[1px] px-3 border-inputBoxColor rounded-md"
+            required
+            disableUnderline
+          />
+        </FormControl>
+        <FormControl className="w-full">
+          <FormLabel className=" text-defaultTextColor text-lg font-semibold">
+            Expertise *
+          </FormLabel>
+          <Input
+            {...register("expertise", {
+              required: "Expertise is required",
+            })}
+            name="expertise"
+            placeholder="World History, Philosophy, Prehistoric, Culture, Ancient"
+            className="py-1 border-[1px] px-3 border-inputBoxColor rounded-md"
+            required
+            disableUnderline
+          />
+        </FormControl>
+      </div>
+      <div className=" w-full flex flex-col lg:flex-row gap-5">
+        <FormControl className="w-full lg:w-1/2 h-full">
+          <FormLabel className=" text-defaultTextColor text-lg font-semibold">
+            About *
+          </FormLabel>
+          <Input
+            {...register("about", {
+              required: "about is required",
+            })}
+            minRows={3}
+            multiline
+            name="about"
+            placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+            className=" h-auto py-1 border-[1px] px-3  border-inputBoxColor rounded-md"
+            required
+            disableUnderline
+          />
+          <FormHelperText className="flex justify-end pr-4 items-end w-full font-normal text-xs text-inputBoxColor">
+            0/1000
+          </FormHelperText>
         </FormControl>
       </div>
     </div>

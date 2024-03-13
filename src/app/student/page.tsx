@@ -31,95 +31,7 @@ const StudentsPage = () => {
   const [more, setMore] = useState<null | HTMLElement>(null);
   const moreOpen = Boolean(more);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setMore(event.currentTarget);
-  };
-
-  console.log("allUsers", allUsers);
-  const ProtectPage = useAuthorization(["Admin", "Teacher"]);
-
-  const tableData = [
-    {
-      name: "Samanta William",
-      id: 123456789,
-      createdAt: "March 25,2021",
-      parentName: "Mana William",
-      city: "Jakarta",
-      grade: "VII A",
-    },
-    {
-      name: "Samanta William",
-      id: 123456789,
-      createdAt: "March 25,2021",
-      parentName: "Mana William",
-      city: "Jakarta",
-      grade: "VII A",
-    },
-    {
-      name: "Samanta William",
-      id: 123456789,
-      createdAt: "March 25,2021",
-      parentName: "Mana William",
-      city: "Jakarta",
-      grade: "VII A",
-    },
-    {
-      name: "Samanta William",
-      id: 123456789,
-      createdAt: "March 25,2021",
-      parentName: "Mana William",
-      city: "Jakarta",
-      grade: "VII A",
-    },
-    {
-      name: "Samanta William",
-      id: 123456789,
-      createdAt: "March 25,2021",
-      parentName: "Mana William",
-      city: "Jakarta",
-      grade: "VII A",
-    },
-    {
-      name: "Samanta William",
-      id: 123456789,
-      createdAt: "March 25,2021",
-      parentName: "Mana William",
-      city: "Jakarta",
-      grade: "VII A",
-    },
-    {
-      name: "Samanta William",
-      id: 123456789,
-      createdAt: "March 25,2021",
-      parentName: "Mana William",
-      city: "Jakarta",
-      grade: "VII A",
-    },
-    {
-      name: "Samanta William",
-      id: 123456789,
-      createdAt: "March 25,2021",
-      parentName: "Mana William",
-      city: "Jakarta",
-      grade: "VII A",
-    },
-    {
-      name: "Samanta William",
-      id: 123456789,
-      createdAt: "March 25,2021",
-      parentName: "Mana William",
-      city: "Jakarta",
-      grade: "VII A",
-    },
-    {
-      name: "Samanta William",
-      id: 123456789,
-      createdAt: "March 25,2021",
-      parentName: "Mana William",
-      city: "Jakarta",
-      grade: "VII A",
-    },
-  ];
+  const ProtectPage = useAuthorization(["Admin","Teacher"]);
 
   // for pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -220,7 +132,7 @@ const StudentsPage = () => {
         <span
           className={`bg-[#FB7D5B] flex justify-center h-10 w-20 my-auto rounded-[40px] text-center items-center text-white font-normal text-sm`}
         >
-          <p className=" my-auto text-center items-center "> {params.value}</p>
+          <p className=" my-auto text-center items-center ">{params.value}</p>
         </span>
       ),
     },
@@ -290,7 +202,7 @@ const StudentsPage = () => {
   useEffect(() => {
     if (allUsers) {
       const filtered = allUsers.filter((user) =>
-        user?.name?.first?.toLowerCase().includes(search.toLowerCase())
+        user?.name?.first?.toLowerCase().includes(search.toLowerCase()) && user.role === "Student"
       );
       setFilteredUsers(filtered);
     }

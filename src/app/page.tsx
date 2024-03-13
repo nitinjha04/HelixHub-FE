@@ -111,20 +111,22 @@ export default function Home() {
                   {currentUser?.name?.first} {currentUser?.name?.last}
                 </span>
               </div>
-              <div className="hidden lg:flex py-2 pb-3 px-7 gap-24 ">
-                <div className=" flex flex-col gap-3 text-defaultTextColor font-semibold text-lg">
-                  {currentUser.role}
-                  <span className=" font-normal text-lg text-smallTextColor">
-                    {currentUser.address}
-                  </span>
-                </div>
-                <div className="  flex flex-col gap-3 font-normal text-lg text-smallTextColor">
-                  Phone
-                  <span className=" text-defaultTextColor font-semibold text-lg">
-                    +{currentUser?.phone?.toString().slice(0, 2)}{" "}
-                    {currentUser?.phone?.toString().slice(2)}
-                  </span>
-                </div>
+              <div className="flex flex-row py-2 pb-3 px-7 justify-between lg:justify-normal lg:gap-24 ">
+               <div className=" flex flex-col lg:flex-row justify-between gap-7 lg:gap-24">
+                  <div className=" flex flex-col gap-3 text-defaultTextColor font-semibold text-lg">
+                    {currentUser.role}
+                    <span className=" font-normal text-lg text-smallTextColor">
+                      {currentUser.address}
+                    </span>
+                  </div>
+                  <div className="  flex flex-col gap-3 font-normal text-lg text-smallTextColor">
+                    Phone
+                    <span className=" text-defaultTextColor font-semibold text-lg">
+                      {currentUser?.phone?.toString().slice(0, 2)}{" "}
+                      {currentUser?.phone?.toString().slice(2)}
+                    </span>
+                  </div>
+               </div>
                 <div className=" flex flex-col gap-3  font-normal text-lg text-smallTextColor">
                   Email
                   <span className=" text-defaultTextColor font-semibold text-lg">

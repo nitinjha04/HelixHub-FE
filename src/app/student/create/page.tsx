@@ -1,18 +1,18 @@
 "use client";
 import useAuthorization from "@/components/hooks/useAuthorization";
 import UserForm from "@/components/user-form";
-import { UpdateData } from "@/interface";
+import {  UserData } from "@/interface";
 import userService from "@/services/user.service";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const CreateStudent = () => {
-  const router = useRouter();
   const ProtectPage = useAuthorization(["Admin", "Teacher"]);
+  const router = useRouter();
 
-  const [formData, setFormData] = useState<UpdateData | null>(null);
+  const [formData, setFormData] = useState<UserData | null>(null);
 
-  const handleFormSubmit = async (data: UpdateData) => {
+  const handleFormSubmit = async (data: UserData) => {
     setFormData(data);
 
     if (!formData) {

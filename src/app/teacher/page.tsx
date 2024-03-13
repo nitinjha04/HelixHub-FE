@@ -1,6 +1,14 @@
 "use client";
 import Header from "@/partials/Header";
-import { Avatar, Button, FormControl, Input } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  FormControl,
+  IconButton,
+  Input,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import React, { useEffect, useState } from "react";
 import CustomPagination from "@/components/Pagination";
@@ -9,8 +17,16 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import AddIcon from "@mui/icons-material/Add";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import useAuthorization from "@/components/hooks/useAuthorization";
+import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
+import { selectAllUsers } from "@/store/reducers/userReducer";
+import { UserData } from "@/interface";
+import { getAllUsersAsync } from "@/store/actions/userAction";
 
 const Teachers = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const allUsers = useAppSelector(selectAllUsers);
   const ProtectPage = useAuthorization(["Admin"]);
 
   const demoData = [
@@ -232,14 +248,24 @@ const Teachers = () => {
     },
   ];
 
+  // for moreIcon
+  const [more, setMore] = useState<null | HTMLElement>(null);
+  const moreOpen = Boolean(more);
+
   // pagination
 
-  const [pageSize, setPageSize] = useState(12);
+  // for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [dataToShow, setDataToShow] = useState<UserData[]>([]);
+  const [search, setSearch] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState<UserData[]>([]);
+
+  const [pageSize, setPageSize] = useState(8);
 
   useEffect(() => {
     if (window.innerWidth >= 1024) {
       // lg
-      setPageSize(12);
+      setPageSize(8);
     } else if (window.innerWidth >= 768) {
       // md
       setPageSize(4);
@@ -249,13 +275,20 @@ const Teachers = () => {
     }
   }, []);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [dataToShow, setDataToShow] = useState<
-    {
-      name: string;
-      subject: string;
-    }[]
-  >([]);
+  useEffect(() => {
+    if (allUsers) {
+      const filtered = allUsers.filter(
+        (user) =>
+          user?.name?.first?.toLowerCase().includes(search.toLowerCase()) &&
+          user.role === "Teacher"
+      );
+      setFilteredUsers(filtered);
+    }
+  }, [allUsers, search]);
+
+  useEffect(() => {
+    dispatch(getAllUsersAsync());
+  }, [dispatch]);
 
   return (
     <div className="px-6 py-6 flex flex-col gap-6">
@@ -263,6 +296,7 @@ const Teachers = () => {
       <div className=" flex flex-col lg:flex-row gap-5 justify-between">
         <FormControl>
           <Input
+            onChange={(e) => setSearch(e.target.value)}
             disableUnderline
             placeholder="Search here..."
             className=" bg-white rounded-[40px] px-3 py-1"
@@ -292,6 +326,7 @@ const Teachers = () => {
             Newest <ArrowDropDownIcon />
           </Button>
           <Button
+            onClick={() => router.push("/teacher/create")}
             className=" py-1 px-8 whitespace-nowrap text-center items-center bg-bgDefaultColor w-full rounded-[40px] text-white  font-normal text-lg  "
             sx={{
               textTransform: "none",
@@ -305,17 +340,51 @@ const Teachers = () => {
         {dataToShow.map((data, index) => (
           <div
             key={index}
-            className=" relative col-span-12 md:col-span-6 lg:col-span-3 rounded-default h-full w-full justify-center items-center py-6 flex flex-col gap-4 mx-auto my-auto  bg-white"
+            className=" z-10 relative col-span-12 md:col-span-6 lg:col-span-3 rounded-default h-full w-full justify-center items-center py-6 flex flex-col gap-4 mx-auto my-auto  bg-white"
           >
-            <MoreHorizIcon
-              sx={{
-                right: 20,
+            <IconButton
+              onClick={(event: React.MouseEvent<HTMLElement>) => {
+                setMore(event.currentTarget);
               }}
-              className="absolute top-5  mx-0"
+              className="absolute z-20 top-1 right-0  mx-0"
+            >
+              <MoreHorizIcon
+                sx={{
+                  right: 20,
+                }}
+              />
+            </IconButton>
+            <Menu
+              elevation={1}
+              id="demo-positioned-menu"
+              aria-labelledby="demo-positioned-button"
+              anchorEl={more}
+              open={moreOpen}
+              onClose={() => setMore(null)}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+            >
+              <MenuItem onClick={() => router.push(`teacher/edit/${data._id}`)}>
+                Edit
+              </MenuItem>
+              <MenuItem>Delete</MenuItem>
+            </Menu>
+            <Avatar
+              className="cursor-pointer"
+              onClick={() => router.push(`/teacher/${data._id}`)}
+              sx={{ width: 100, height: 100 }}
             />
-            <Avatar sx={{ width: 100, height: 100 }} />
-            <span className="font-bold text-xl lg:text-2xl text-defaultTextColor ">
-              {data.name}
+            <span
+              onClick={() => router.push(`/teacher/${data._id}`)}
+              className="cursor-pointer font-bold text-xl lg:text-2xl text-defaultTextColor "
+            >
+              {data.name?.first}
               <p className=" mx-auto text-center items-center font-normal text-lg text-smallTextColor">
                 {data.subject}
               </p>
@@ -335,7 +404,7 @@ const Teachers = () => {
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         pageSize={pageSize}
-        tableData={demoData}
+        tableData={filteredUsers || []}
         setDataToShow={setDataToShow}
       />
     </div>

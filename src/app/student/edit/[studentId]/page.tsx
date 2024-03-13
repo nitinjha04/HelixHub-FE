@@ -1,7 +1,7 @@
 "use client";
 import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import UserForm from "@/components/user-form";
-import { UpdateData } from "@/interface";
+import { UserData } from "@/interface";
 import {
   getUserDetailsAsync,
   updateUserAsync,
@@ -16,9 +16,9 @@ const EditStudent = () => {
   const params = useParams();
   const userDetail = useAppSelector(selectUserDetail);
   const dispatch = useAppDispatch();
-  const [formData, setFormData] = useState<UpdateData | null>(null);
+  const [formData, setFormData] = useState<UserData | null>(null);
 
-  const handleFormSubmit = (data: UpdateData) => {
+  const handleFormSubmit = (data: UserData) => {
     setFormData(data);
     if (!formData) {
       console.error("Form data is null");
@@ -50,7 +50,7 @@ const EditStudent = () => {
           title="Edit Student"
           subHeader="Parent Details"
           onSubmit={handleFormSubmit}
-          student={false}
+          student={true}
         />
       )}
     </>

@@ -186,7 +186,7 @@ export default function StudentDetails() {
                   <div className="  flex flex-col gap-3 font-normal text-sm lg:text-lg text-smallTextColor">
                     Address
                     <span className=" text-defaultTextColor font-semibold text-sm lg:text-lg">
-                      {/* LATER */}
+                      {/* TODO to change it dynamically  */}
                       Jakarta, Indonesia
                     </span>
                   </div>
@@ -195,7 +195,8 @@ export default function StudentDetails() {
                   <div className="  flex flex-col gap-3 font-normal text-sm lg:text-lg text-smallTextColor">
                     Phone
                     <span className=" text-defaultTextColor font-semibold text-sm lg:text-lg">
-                      {userDetail.phone}
+                      {userDetail?.phone?.toString().slice(0, 2)}{" "}
+                      {userDetail?.phone?.toString().slice(2)}
                     </span>
                   </div>
                   <div className=" flex flex-col gap-3  font-normal text-sm lg:text-lg text-smallTextColor">

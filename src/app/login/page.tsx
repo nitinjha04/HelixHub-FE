@@ -11,7 +11,6 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAuthStore } from "@/store/auth.store";
 import { LoginData, RegisterData } from "@/interface";
 import { toast } from "react-toastify";
 import authService from "@/services/auth.service";
@@ -21,9 +20,6 @@ import { useRouter } from "next/navigation";
 const Login = () => {
   const router = useRouter();
   const [registerCard, setRegisterCard] = useState(false);
-
-  // const { login: handleLogin } = useAuthStore();
-  // const { register: handleRegister } = useAuthStore();
 
   const {
     register: registerLogin,
@@ -99,6 +95,7 @@ const Login = () => {
           />
         </div>
         <div className="  flex flex-1 basis-1/2 flex-col  lg:px-12 my-auto lg:py-0 py-6  ">
+          {/* TODO In Register page checkbox to define create account as "Student" or "Teacher" */}
           {registerCard ? (
             <form
               onSubmit={registerSubmit((data) => {

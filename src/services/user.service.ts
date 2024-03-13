@@ -1,5 +1,5 @@
 import httpservice from "@/config/httpservice";
-import { UpdateData, UserData } from "@/interface";
+import { UserData } from "@/interface";
 
 class UserService {
   getAllUsers = async () => {
@@ -42,7 +42,7 @@ class UserService {
     }
   };
 
-  updateUser = async (id: string, updateData: UpdateData) => {
+  updateUser = async (id: string, updateData: UserData) => {
     try {
       const response = await httpservice.put(`api/user/update/${id}`, {
         ...updateData,

@@ -1,4 +1,4 @@
-import { UpdateData, UserData } from "@/interface";
+import { UserData } from "@/interface";
 import userService from "@/services/user.service";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -33,7 +33,7 @@ export const getCurrentUserAsync = createAsyncThunk<UserData>(
 );
 export const updateUserAsync = createAsyncThunk<
   void,
-  { id: string; updateData: UpdateData }
+  { id: string; updateData: UserData }
 >("user/updateUser", async ({ id, updateData }) => {
   const response = await userService.updateUser(id, updateData);
   return response.data.result;

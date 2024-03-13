@@ -10,6 +10,7 @@ export interface RegisterData extends LoginData {
 }
 
 export interface UserData {
+  //common
   _id: string;
   name?: {
     first?: string;
@@ -21,6 +22,8 @@ export interface UserData {
   phone?: number;
   email?: string;
   address?: string;
+  createdAt?: string;
+  //student
   parentName?: {
     first?: string;
     last?: string;
@@ -28,39 +31,47 @@ export interface UserData {
   parentEmail?: string;
   parentPhone?: string;
   parentAddress?: string;
-  university?: string;
-  degreeStartDate?: string;
-  degreeEndDate?: string;
-  degree?: string;
-  universityCity?: string;
-  createdAt?: string;
   grade?: string;
+  //Teacher
+  education?: [
+    {
+      degree?: string;
+      degreeStartDate?: string;
+      degreeEndDate?: string;
+      university?: string;
+      universityCity?: string;
+    }
+  ];
+  subject?: string;
+  about?: string;
+  expertise?: string;
 }
 
 export interface ErrorResponse {
   data: string; // Adjust the type according to your error response structure
 }
 
-export interface UpdateData extends UserData {
-  name?: {
-    first?: string;
-    last?: string;
-  };
-  dob?: string;
-  pob?: string;
-  phone?: number;
-  email?: string;
-  address?: string;
-  parentName?: {
-    first?: string;
-    last?: string;
-  };
-  parentEmail?: string;
-  parentPhone?: string;
-  parentAddress?: string;
-  university?: string;
-  degreeStartDate?: string;
-  degreeEndDate?: string;
-  degree?: string;
-  universityCity?: string;
-}
+// export interface UpdateData extends UserData {
+//   name?: {
+//     first?: string;
+//     last?: string;
+//   };
+//   dob?: string;
+//   pob?: string;
+//   phone?: number;
+//   email?: string;
+//   address?: string;
+//   parentName?: {
+//     first?: string;
+//     last?: string;
+//   };
+//   parentEmail?: string;
+//   parentPhone?: string;
+//   parentAddress?: string;
+//   university?: string;
+//   degreeStartDate?: string;
+//   degreeEndDate?: string;
+//   degree?: string;
+//   universityCity?: string;
+// }
+

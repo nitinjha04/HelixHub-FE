@@ -1,4 +1,4 @@
-import { UpdateData, UserData } from "@/interface";
+import { UserData } from "@/interface";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
   getAllUsersAsync,
