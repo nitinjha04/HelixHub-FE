@@ -6,13 +6,14 @@ import {
   FormLabel,
   Input,
 } from "@mui/material";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   SubmitHandler,
   UseFormHandleSubmit,
   UseFormRegister,
   useForm,
 } from "react-hook-form";
+import MyDropzone from "../dropzone";
 
 interface UserForm {
   title: string;
@@ -32,9 +33,18 @@ const UserForm: FC<UserForm> = ({
   // handleSubmit,
 }) => {
   const { register, handleSubmit, reset } = useForm<UserData>();
+  const [profileImage, setProfileImage] = useState<File | null>(null);
 
   const onSubmitForm: SubmitHandler<UserData> = (data) => {
-    onSubmit(data);
+    const userData: any = {
+      ...data,
+    };
+
+    if (profileImage) {
+      userData.file = profileImage;
+    }
+    console.log(userData);
+    onSubmit(userData);
   };
 
   useEffect(() => {
@@ -45,6 +55,7 @@ const UserForm: FC<UserForm> = ({
 
   return (
     <form
+      encType="multipart/form-data"
       onSubmit={handleSubmit(onSubmitForm)}
       className="px-6 py-4 flex flex-col gap-6 w-full h-full "
     >
@@ -55,8 +66,14 @@ const UserForm: FC<UserForm> = ({
         <div className=" rounded-t-default px-8 py-2 bg-bgDefaultColor w-full text-white">
           Personal Details
         </div>
-        <div className=" flex flex-row">
-          <div className=" flex flex-col gap-6 w-full px-8 py-7">
+        <div className=" flex flex-col lg:flex-row px-8 py-7 gap-8">
+          <div className=" min-w-[175px] mx-auto flex flex-col gap-5  ">
+            <span className=" text-defaultTextColor text-lg font-semibold">
+              Photo *
+            </span>
+            <MyDropzone register={register} setProfileImage={setProfileImage} />
+          </div>
+          <div className=" flex flex-col gap-6 w-full  ">
             <div className=" w-full flex flex-col lg:flex-row gap-5">
               <FormControl className="w-full">
                 <FormLabel className=" text-defaultTextColor text-lg font-semibold">

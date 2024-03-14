@@ -1,3 +1,5 @@
+import { File } from "buffer";
+
 export interface LoginData {
   email: string;
   password: string;
@@ -11,7 +13,7 @@ export interface RegisterData extends LoginData {
 
 export interface UserData {
   //common
-  _id: string;
+  _id?: string;
   name?: {
     first?: string;
     last?: string;
@@ -23,6 +25,15 @@ export interface UserData {
   email?: string;
   address?: string;
   createdAt?: string;
+  profilePicture?: {
+    url?: {
+      type: String;
+    };
+    urlId?: {
+      type: String;
+    };
+  };
+  file?: File | null;
   //student
   parentName?: {
     first?: string;
@@ -74,4 +85,3 @@ export interface ErrorResponse {
 //   degree?: string;
 //   universityCity?: string;
 // }
-

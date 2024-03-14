@@ -6,9 +6,7 @@ import {
   getUserDetailsAsync,
   updateUserAsync,
 } from "@/store/actions/userAction";
-import {
-  selectUserDetail,
-} from "@/store/reducers/userReducer";
+import { selectUserDetail } from "@/store/reducers/userReducer";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -27,14 +25,13 @@ const EditStudent = () => {
     if (userDetail) {
       dispatch(
         updateUserAsync({
-          id: userDetail._id,
+          id: userDetail._id || "",
           updateData: formData,
         })
       );
     } else {
       console.log("current user is undefined");
     }
-    console.log("Form data submitted:", data);
   };
 
   useEffect(() => {
