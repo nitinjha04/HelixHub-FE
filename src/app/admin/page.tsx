@@ -1,7 +1,6 @@
 "use client";
 
 import { LineChart } from "@/components/charts";
-import { useUserStore } from "@/store/user.store";
 import { Avatar, Button, FormControl, Input, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -22,7 +21,6 @@ export default function Admin() {
 
   const router = useRouter();
 
-  const { user, getCurrentUser } = useUserStore();
 
   const demoDataMessage = [
     {
@@ -242,9 +240,7 @@ export default function Admin() {
     // Add other row data properties as needed
   }));
 
-  useEffect(() => {
-    getCurrentUser();
-  }, []);
+
 
   return (
     <div className="grid grid-cols-12 w-full h-full   ">

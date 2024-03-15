@@ -2,9 +2,12 @@ import { UserData } from "@/interface";
 import {
   Button,
   FormControl,
+  FormControlLabel,
   FormHelperText,
   FormLabel,
   Input,
+  Radio,
+  RadioGroup,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import {
@@ -319,8 +322,8 @@ const ParentDetails: FC<{ register: any }> = ({ register }) => {
           />
         </FormControl>
       </div>
-      <div className="w-full lg:w-1/2 h-full flex flex-col lg:flex-row gap-5">
-        <FormControl className="w-full h-full pr-3">
+      <div className="w-full h-full flex flex-col lg:flex-row gap-5">
+        <FormControl className=" w-full lg:w-1/2 h-full ">
           <FormLabel className=" text-defaultTextColor text-lg font-semibold">
             Address *
           </FormLabel>
@@ -339,6 +342,17 @@ const ParentDetails: FC<{ register: any }> = ({ register }) => {
           <FormHelperText className="flex justify-end pr-4 items-end w-full font-normal text-xs text-inputBoxColor">
             0/2000
           </FormHelperText>
+        </FormControl>
+        <FormControl className=" w-1/2 lg:w-1/4">
+          <FormLabel id="demo-row-radio-buttons-group-label">Payment</FormLabel>
+          <RadioGroup
+            row
+            aria-labelledby="demo-row-radio-buttons-group-label"
+            name="row-radio-buttons-group"
+          >
+            <FormControlLabel value="cash" control={<Radio />} label="cash" />
+            <FormControlLabel value="card" control={<Radio />} label="card" />
+          </RadioGroup>
         </FormControl>
       </div>
     </div>
