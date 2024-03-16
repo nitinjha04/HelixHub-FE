@@ -58,6 +58,16 @@ export interface UserData {
   expertise?: string;
 }
 
+export interface Messages {
+  message?: {
+    text?: string;
+  };
+  sender?: string;
+  receiver?: string;
+  createdAt?: string;
+  to?: string;
+}
+
 export interface ErrorResponse {
   data: string; // Adjust the type according to your error response structure
 }
