@@ -3,7 +3,7 @@ import httpservice from "@/config/httpservice";
 class MessageService {
   latestMessageInfo = async () => {
     try {
-      const response = await httpservice.get("/api/chat/getAll");
+      const response = await httpservice.get("/api/chat/getLatestMessage");
       return response;
     } catch (error) {
       console.log(error);

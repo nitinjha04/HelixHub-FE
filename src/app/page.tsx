@@ -5,15 +5,23 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { useEffect } from "react";
-import { getCurrentUserAsync } from "@/store/actions/userAction";
 import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import { selectCurrentUserInfo } from "@/store/reducers/userReducer";
+import { useRouter } from "next/navigation";
+import messageAction from "@/store/actions/messageAction";
+import { selectLatestMessageInfo } from "@/store/reducers/messageReducer";
+import useAuthorization from "@/components/hooks/useAuthorization";
 
 export default function Home() {
+  const ProtectPage = useAuthorization(["Student", "Teacher"], "/admin");
+
+  const router = useRouter();
   const dispatch = useAppDispatch();
 
+  const latestMessageInfo = useAppSelector(selectLatestMessageInfo);
+
   const currentUser = useAppSelector(selectCurrentUserInfo);
-  
+
   console.log("currentUser", currentUser);
   const demoData = [
     {
@@ -66,6 +74,10 @@ export default function Home() {
     },
   ];
 
+  useEffect(() => {
+    dispatch(messageAction.latestMessageInfoAsync());
+  }, [dispatch]);
+
   return (
     <div className="grid grid-cols-12 w-full h-full ">
       <div className="grid h-full overflow-auto no-scrollbar  grid-cols-12 col-span-12 lg:col-span-9 py-4 px-3 lg:px-8 pb-6  gap-6 w-full ">
@@ -112,7 +124,7 @@ export default function Home() {
                 </span>
               </div>
               <div className="flex flex-row py-2 pb-3 px-7 justify-between lg:justify-normal lg:gap-24 ">
-               <div className=" flex flex-col lg:flex-row justify-between gap-7 lg:gap-24">
+                <div className=" flex flex-col lg:flex-row justify-between gap-7 lg:gap-24">
                   <div className=" flex flex-col gap-3 text-defaultTextColor font-semibold text-lg">
                     {currentUser.role}
                     <span className=" font-normal text-lg text-smallTextColor">
@@ -126,7 +138,7 @@ export default function Home() {
                       {currentUser?.phone?.toString().slice(2)}
                     </span>
                   </div>
-               </div>
+                </div>
                 <div className=" flex flex-col gap-3  font-normal text-lg text-smallTextColor">
                   Email
                   <span className=" text-defaultTextColor font-semibold text-lg">
@@ -227,27 +239,36 @@ export default function Home() {
               />
             </FormControl>
             <div className=" w-full flex gap-4 flex-col">
-              {demoDataMessage.slice(0, 5).map((data, index) => (
+              {latestMessageInfo.slice(0, 5).map((data, index) => (
                 <div
+                  // TODO when click on message open that person message box
+                  onClick={() => router.push("chat")}
                   key={index}
-                  className="flex justify-between w-full gap-3 border-b-[1px] border-smallTextColor pb-4"
+                  className=" cursor-pointer flex justify-between w-full gap-3 border-b-[1px] border-smallTextColor pb-4"
                 >
                   <div className=" flex gap-3">
                     <Avatar />
                     <span className=" text-defaultTextColor font-semibold text-sm">
-                      {data.name}{" "}
+                      {data.oppositeUserDetails[0].name?.first}{" "}
                       <p className=" text-smallTextColor font-normal text-sm ">
-                        {data.message.substring(0, 27)} ...
+                        {data.message.text.length > 27
+                          ? data.message.text.substring(0, 27) + " ..."
+                          : data.message.text}
                       </p>
                     </span>
                   </div>
                   <p className=" text-smallTextColor font-normal text-sm items-start ">
-                    {data.updatedAt}
+                    {new Date(data.createdAt).toLocaleTimeString("en-US", {
+                      hour: "numeric",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
                   </p>
                 </div>
               ))}
             </div>
             <Button
+              onClick={() => router.push("chat")}
               className=" py-3 mt-auto  text-center items-center bg-[#4D44B51A] w-full rounded-[40px] text-bgDefaultColor  font-bold text-lg  "
               sx={{
                 textTransform: "none",

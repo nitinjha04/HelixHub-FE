@@ -3,10 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import useAuthorization from "@/components/hooks/useAuthorization";
 import UserForm from "@/components/user-form";
 import { UserData } from "@/interface";
-import {
-  getUserDetailsAsync,
-  updateUserAsync,
-} from "@/store/actions/userAction";
+import UserAction from "@/store/actions/userAction";
 import { selectUserDetail } from "@/store/reducers/userReducer";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -29,7 +26,7 @@ const EditTeacher = () => {
     formData.role = "Teacher";
     if (userDetail) {
       dispatch(
-        updateUserAsync({
+        UserAction.updateUserAsync({
           id: userDetail._id,
           updateData: formData,
         })
@@ -43,7 +40,7 @@ const EditTeacher = () => {
   };
 
   useEffect(() => {
-    dispatch(getUserDetailsAsync(teacherId));
+    dispatch(UserAction.getUserDetailsAsync(teacherId));
   }, [dispatch]);
 
   return (

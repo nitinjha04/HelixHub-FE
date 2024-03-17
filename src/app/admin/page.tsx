@@ -15,12 +15,18 @@ import CustomPagination from "@/components/Pagination";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import useAuthorization from "@/components/hooks/useAuthorization";
 import HeaderProfile from "@/components/HeaderProfile";
+import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
+import { selectAllUsers } from "@/store/reducers/userReducer";
+import userAction from "@/store/actions/userAction";
+import messageAction from "@/store/actions/messageAction";
+import { selectLatestMessageInfo } from "@/store/reducers/messageReducer";
 
 export default function Admin() {
   const ProtectPage = useAuthorization(["Admin"]);
-
   const router = useRouter();
-
+  const dispatch = useAppDispatch();
+  const allUsers = useAppSelector(selectAllUsers);
+  const latestMessage = useAppSelector(selectLatestMessageInfo);
 
   const demoDataMessage = [
     {
@@ -240,7 +246,10 @@ export default function Admin() {
     // Add other row data properties as needed
   }));
 
-
+  useEffect(() => {
+    dispatch(userAction.getAllUsersAsync());
+    dispatch(messageAction.latestMessageInfoAsync());
+  }, [dispatch]);
 
   return (
     <div className="grid grid-cols-12 w-full h-full   ">
@@ -283,7 +292,8 @@ export default function Admin() {
               <span className=" text-[#A098AE] font-normal text-base flex flex-col  ">
                 Students{" "}
                 <p className=" text-defaultTextColor font-bold text-lg mx-auto lg:mx-0 lg:text-2xl">
-                  849
+                  {allUsers &&
+                    allUsers.filter((user) => user.role === "Student").length}
                 </p>
               </span>
             </div>
@@ -297,7 +307,8 @@ export default function Admin() {
               <span className=" text-[#A098AE] font-normal text-base flex flex-col  ">
                 Teachers{" "}
                 <p className=" text-defaultTextColor font-bold text-lg mx-auto lg:mx-0 lg:text-2xl">
-                  849
+                  {allUsers &&
+                    allUsers.filter((user) => user.role === "Teacher").length}
                 </p>
               </span>
             </div>
@@ -446,7 +457,7 @@ export default function Admin() {
               Messages
             </span>
             <div className=" w-full flex gap-5 flex-col pb-5">
-              {demoDataMessage.slice(0, 4).map((data, index) => (
+              {latestMessage.slice(0, 4).map((data, index) => (
                 <div
                   key={index}
                   className="flex justify-between w-full gap-3 border-b-[1px] border-smallTextColor py-4"
@@ -454,19 +465,26 @@ export default function Admin() {
                   <div className=" flex gap-3">
                     <Avatar />
                     <span className=" text-defaultTextColor font-semibold text-sm">
-                      {data.name}{" "}
+                      {data.oppositeUserDetails[0].name?.first}{" "}
                       <p className=" text-smallTextColor font-normal text-sm ">
-                        {data.message.substring(0, 15)} ...
+                        {data.message.text.length > 15
+                          ? data.message.text.substring(0, 15) + " ..."
+                          : data.message.text}
                       </p>
                     </span>
                   </div>
                   <p className=" text-smallTextColor font-normal text-sm items-start ">
-                    {data.updatedAt}
+                    {new Date(data.createdAt).toLocaleTimeString("en-US", {
+                      hour: "numeric",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
                   </p>
                 </div>
               ))}
             </div>
             <Button
+          onClick={()=> router.push('/chat')}
               className=" py-3 text-center items-center bg-[#4D44B51A] w-full rounded-[40px] text-bgDefaultColor  font-bold text-lg  "
               sx={{
                 textTransform: "none",

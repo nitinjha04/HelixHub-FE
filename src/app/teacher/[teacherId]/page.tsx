@@ -16,7 +16,7 @@ import useAuthorization from "@/components/hooks/useAuthorization";
 import { useParams, useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import { selectUserDetail } from "@/store/reducers/userReducer";
-import { getUserDetailsAsync } from "@/store/actions/userAction";
+import UserAction from "@/store/actions/userAction";
 
 export default function TeacherDetails() {
   const ProtectPage = useAuthorization(["Admin"]);
@@ -31,7 +31,7 @@ export default function TeacherDetails() {
 
   useEffect(() => {
     const teacherId = params.teacherId.toString();
-    dispatch(getUserDetailsAsync(teacherId));
+    dispatch(UserAction.getUserDetailsAsync(teacherId));
   }, [dispatch]);
 
   return (

@@ -19,10 +19,11 @@ import useAuthorization from "@/components/hooks/useAuthorization";
 import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import { selectAllUsers } from "@/store/reducers/userReducer";
 import { UserData } from "@/interface";
-import { getAllUsersAsync } from "@/store/actions/userAction";
+import UserAction from "@/store/actions/userAction";
 import { useRouter } from "next/navigation";
 
 const StudentsPage = () => {
+  const ProtectPage = useAuthorization(["Admin", "Teacher"]);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const allUsers = useAppSelector(selectAllUsers);
@@ -30,8 +31,6 @@ const StudentsPage = () => {
   // for moreIcon
   const [more, setMore] = useState<null | HTMLElement>(null);
   const moreOpen = Boolean(more);
-
-  const ProtectPage = useAuthorization(["Admin","Teacher"]);
 
   // for pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -201,15 +200,17 @@ const StudentsPage = () => {
 
   useEffect(() => {
     if (allUsers) {
-      const filtered = allUsers.filter((user) =>
-        user?.name?.first?.toLowerCase().includes(search.toLowerCase()) && user.role === "Student"
+      const filtered = allUsers.filter(
+        (user) =>
+          user?.name?.first?.toLowerCase().includes(search.toLowerCase()) &&
+          user.role === "Student"
       );
       setFilteredUsers(filtered);
     }
   }, [allUsers, search]);
 
   useEffect(() => {
-    dispatch(getAllUsersAsync());
+    dispatch(UserAction.getAllUsersAsync());
   }, [dispatch]);
 
   return (

@@ -8,8 +8,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHook";
-import { getCurrentUserAsync } from "@/store/actions/userAction";
 import { selectCurrentUserInfo } from "@/store/reducers/userReducer";
+import UserAction from "@/store/actions/userAction";
 
 interface SidebarProps {
   children: ReactNode;
@@ -39,7 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           />
         </svg>
       ),
-      link: "/",
+      link: `${currentUser && currentUser.role === "Admin" ? "/admin" : "/"}`,
     },
     {
       index: 2,
@@ -183,7 +183,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           />
         </svg>
       ),
-      link: "/",
+      link: "/chat",
     },
     {
       index: 9,
@@ -212,7 +212,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
 
   useEffect(() => {
-    dispatch(getCurrentUserAsync());
+    dispatch(UserAction.getCurrentUserAsync());
   }, [dispatch]);
 
   useEffect(() => {

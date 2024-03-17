@@ -42,7 +42,7 @@ class UserService {
     }
   };
 
-  updateUser = async (id: string, updateData: UserData) => {
+  updateUser = async (id: string | undefined, updateData: UserData) => {
     try {
       const response = await httpservice.put(`api/user/update/${id}`, {
         ...updateData,

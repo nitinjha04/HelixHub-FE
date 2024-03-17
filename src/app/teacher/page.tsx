@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import { selectAllUsers } from "@/store/reducers/userReducer";
 import { UserData } from "@/interface";
-import { getAllUsersAsync } from "@/store/actions/userAction";
+import UserAction from "@/store/actions/userAction";
 
 const Teachers = () => {
   const router = useRouter();
@@ -287,7 +287,7 @@ const Teachers = () => {
   }, [allUsers, search]);
 
   useEffect(() => {
-    dispatch(getAllUsersAsync());
+    dispatch(UserAction.getAllUsersAsync());
   }, [dispatch]);
 
   return (

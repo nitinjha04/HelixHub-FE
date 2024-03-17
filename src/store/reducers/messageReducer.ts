@@ -1,11 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import {
-  getMessagesAsync,
-  latestMessageInfoAsync,
-  sendMessagesAsync,
-} from "../actions/messageAction";
 import { RootState } from "../store";
 import { Messages } from "@/interface";
+import messageAction from "../actions/messageAction";
 
 export interface MessageState {
   messages: Messages[];
@@ -27,39 +23,39 @@ const messageSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(latestMessageInfoAsync.pending, (state) => {
+      .addCase(messageAction.latestMessageInfoAsync.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(
-        latestMessageInfoAsync.fulfilled,
+        messageAction.latestMessageInfoAsync.fulfilled,
         (state, action: PayloadAction<any[]>) => {
           state.loading = false;
           state.latestMessageInfo = action.payload;
           state.error = null;
         }
       )
-      .addCase(getMessagesAsync.pending, (state) => {
+      .addCase(messageAction.getMessagesAsync.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(
-        getMessagesAsync.fulfilled,
+        messageAction.getMessagesAsync.fulfilled,
         (state, action: PayloadAction<Messages[]>) => {
           state.loading = false;
           state.messages = action.payload;
           state.error = null;
         }
       )
-      .addCase(sendMessagesAsync.pending, (state) => {
+      .addCase(messageAction.sendMessagesAsync.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(sendMessagesAsync.fulfilled, (state) => {
+      .addCase(messageAction.sendMessagesAsync.fulfilled, (state) => {
         state.loading = false;
         state.error = null;
       })
-      .addCase(sendMessagesAsync.rejected, (state, action) => {
+      .addCase(messageAction.sendMessagesAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "An error occurred";
       });
@@ -67,7 +63,7 @@ const messageSlice = createSlice({
 });
 
 export const selectUserMessages = (state: RootState) => state.message.messages;
-export const selectLatestMessageInfoAsync = (state: RootState) =>
+export const selectLatestMessageInfo = (state: RootState) =>
   state.message.latestMessageInfo;
 
 export default messageSlice.reducer;

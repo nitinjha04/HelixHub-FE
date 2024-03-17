@@ -2,15 +2,12 @@
 import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import { Messages, UserData } from "@/interface";
 import Header from "@/partials/Header";
+import MessageAction from "@/store/actions/messageAction";
+import UserAction from "@/store/actions/userAction";
 import {
-  getMessagesAsync,
-  sendMessagesAsync,
-} from "@/store/actions/messageAction";
-import {
-  getAllUsersAsync,
-  getCurrentUserAsync,
-} from "@/store/actions/userAction";
-import { selectUserMessages } from "@/store/reducers/messageReducer";
+  selectLatestMessageInfo,
+  selectUserMessages,
+} from "@/store/reducers/messageReducer";
 import {
   selectAllUsers,
   selectCurrentUserInfo,
@@ -34,12 +31,18 @@ const Chat = () => {
   // TODO online is not working
   const [liveStatus, setLiveStatus] = useState(false);
 
-  const [messageUserId, setMessageUserId] = useState<string | undefined>(); // person we are sending messages to
-  const [userView, setUserView] = useState<UserData | undefined>(); // name of that person
+  // person we are sending messages to
+  const [messageUserId, setMessageUserId] = useState<string | undefined>();
+
+  // name of that person
+  const [userView, setUserView] = useState<UserData | undefined>();
 
   // getMessages of user
   const initializeUserMessages = useAppSelector(selectUserMessages);
   const [userMessages, setUserMessages] = useState<Messages[]>([]);
+
+  // get latest message chat info
+  const latestMessageInfo = useAppSelector(selectLatestMessageInfo);
 
   const demoDataMessage = [
     {
@@ -347,11 +350,11 @@ const Chat = () => {
   const handleGetMessage = async (id: string | undefined) => {
     try {
       setMessageUserId(id);
-      dispatch(getMessagesAsync({ receiver: id }));
+      dispatch(MessageAction.getMessagesAsync({ receiver: id }));
     } catch (error) {
       console.log(error);
     }
-  };
+    };
 
   const handleSendMessage = (message: string) => {
     socket.emit("send-msg", {
@@ -372,7 +375,7 @@ const Chat = () => {
     ]);
 
     dispatch(
-      sendMessagesAsync({
+      MessageAction.sendMessagesAsync({
         receiver: messageUserId,
         message: {
           text: message,
@@ -403,19 +406,22 @@ const Chat = () => {
       lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, []);
-  const scrollToBottom = () => {
-    if (chatBoxRef.current) {
-      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-    }
-  };
 
+  // scroll to bottom
   useEffect(() => {
+    const scrollToBottom = () => {
+      if (chatBoxRef.current) {
+        chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+      }
+    };
     scrollToBottom();
   }, [userMessages]);
 
+  // api calls
   useEffect(() => {
-    dispatch(getAllUsersAsync());
-    dispatch(getCurrentUserAsync());
+    dispatch(UserAction.getAllUsersAsync());
+    dispatch(UserAction.getCurrentUserAsync());
+    dispatch(MessageAction.latestMessageInfoAsync());
   }, [dispatch]);
 
   // set user messages to state
@@ -423,6 +429,7 @@ const Chat = () => {
     setUserMessages(initializeUserMessages);
   }, [initializeUserMessages]);
 
+  // TODO to use friends not all users
   useEffect(() => {
     if (allUsers) {
       setUserView(allUsers[0]);
@@ -511,12 +518,12 @@ const Chat = () => {
           <div className=" h-full  flex flex-col gap-4">
             <span>Chats</span>
             <div className=" w-full max-h-52 flex gap-5 flex-col pb-5 overflow-auto no-scrollbar">
-              {allUsers &&
-                allUsers.map((data, index) => (
+              {latestMessageInfo &&
+                latestMessageInfo.map((data, index) => (
                   <div
                     onClick={() => {
-                      handleGetMessage(data._id);
-                      setUserView(data);
+                      handleGetMessage(data.oppositeUserDetails[0]._id);
+                      setUserView(data.oppositeUserDetails[0]);
                     }}
                     key={index}
                     className="cursor-pointer flex justify-between w-full gap-3 border-b-[1px] border-smallTextColor pb-4"
@@ -524,16 +531,20 @@ const Chat = () => {
                     <div className=" flex gap-3">
                       <Avatar />
                       <span className=" text-defaultTextColor font-semibold text-sm">
-                        {data.name?.first}{" "}
+                        {data.oppositeUserDetails[0].name?.first}{" "}
                         <p className=" text-smallTextColor font-normal text-sm ">
-                          {/* TODO */}
-                          {/* {data.message.substring(0, 15)} ... */}
+                          {data.message.text.length > 17
+                            ? data.message.text.substring(0, 17) + " ..."
+                            : data.message.text}
                         </p>
                       </span>
                     </div>
                     <p className=" text-smallTextColor font-normal text-sm items-start ">
-                      {/* TODO */}
-                      {/* {data.updatedAt} */}
+                      {new Date(data.createdAt).toLocaleTimeString("en-US", {
+                        hour: "numeric",
+                        minute: "2-digit",
+                        hour12: true,
+                      })}
                     </p>
                   </div>
                 ))}

@@ -2,10 +2,9 @@
 import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import UserForm from "@/components/user-form";
 import { UserData } from "@/interface";
-import {
-  getUserDetailsAsync,
-  updateUserAsync,
-} from "@/store/actions/userAction";
+
+import UserAction from "@/store/actions/userAction";
+
 import { selectUserDetail } from "@/store/reducers/userReducer";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -24,7 +23,7 @@ const EditStudent = () => {
     }
     if (userDetail) {
       dispatch(
-        updateUserAsync({
+        UserAction.updateUserAsync({
           id: userDetail._id || "",
           updateData: formData,
         })
@@ -36,7 +35,7 @@ const EditStudent = () => {
 
   useEffect(() => {
     const studentId = params.studentId.toString();
-    dispatch(getUserDetailsAsync(studentId));
+    dispatch(UserAction.getUserDetailsAsync(studentId));
   }, [dispatch]);
 
   return (

@@ -13,7 +13,7 @@ import Schedule from "@/components/schedule/Schedule";
 import useAuthorization from "@/components/hooks/useAuthorization";
 import { useParams } from "next/navigation";
 import { selectUserDetail } from "@/store/reducers/userReducer";
-import { getUserDetailsAsync } from "@/store/actions/userAction";
+import UserAction from "@/store/actions/userAction";
 import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 
 export default function StudentDetails() {
@@ -122,7 +122,7 @@ export default function StudentDetails() {
 
   useEffect(() => {
     const studentId = params.studentId.toString();
-    dispatch(getUserDetailsAsync(studentId));
+    dispatch(UserAction.getUserDetailsAsync(studentId));
   }, [dispatch]);
 
   return (

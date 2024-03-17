@@ -1,12 +1,7 @@
 import { UserData } from "@/interface";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import {
-  getAllUsersAsync,
-  getCurrentUserAsync,
-  updateUserAsync,
-  getUserDetailsAsync,
-} from "../actions/userAction";
 import { RootState } from "../store";
+import userAction from "../actions/userAction";
 
 export interface UserState {
   currentUser: UserData | null;
@@ -30,71 +25,71 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getAllUsersAsync.pending, (state) => {
+      .addCase(userAction.getAllUsersAsync.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(
-        getAllUsersAsync.fulfilled,
+        userAction.getAllUsersAsync.fulfilled,
         (state, action: PayloadAction<UserData[]>) => {
           state.loading = false;
           state.allUser = action.payload;
           state.error = null;
         }
       )
-      .addCase(getAllUsersAsync.rejected, (state, action) => {
+      .addCase(userAction.getAllUsersAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "An error occurred";
       })
-      .addCase(getCurrentUserAsync.pending, (state) => {
+      .addCase(userAction.getCurrentUserAsync.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(
-        getCurrentUserAsync.fulfilled,
+        userAction.getCurrentUserAsync.fulfilled,
         (state, action: PayloadAction<UserData>) => {
           state.loading = false;
           state.currentUser = action.payload;
           state.error = null;
         }
       )
-      .addCase(getCurrentUserAsync.rejected, (state, action) => {
+      .addCase(userAction.getCurrentUserAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "An error occurred";
       })
-      .addCase(getUserDetailsAsync.pending, (state) => {
+      .addCase(userAction.getUserDetailsAsync.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(
-        getUserDetailsAsync.fulfilled,
+        userAction.getUserDetailsAsync.fulfilled,
         (state, action: PayloadAction<UserData>) => {
           state.loading = false;
           state.userDetail = action.payload;
           state.error = null;
         }
       )
-      .addCase(getUserDetailsAsync.rejected, (state, action) => {
+      .addCase(userAction.getUserDetailsAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "An error occurred";
       })
-      .addCase(updateUserAsync.pending, (state) => {
+      .addCase(userAction.updateUserAsync.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       // .addCase(
-      //   updateUserAsync.fulfilled,
+      //   userAction.updateUserAsync.fulfilled,
       //   (state, action: PayloadAction<UserData>) => {
       //     state.loading = false;
       //     state.currentUser = action.payload;
       //     state.error = null;
       //   }
       // )
-      .addCase(updateUserAsync.fulfilled, (state) => {
+      .addCase(userAction.updateUserAsync.fulfilled, (state) => {
         state.loading = false;
         state.error = null;
       })
-      .addCase(updateUserAsync.rejected, (state, action) => {
+      .addCase(userAction.updateUserAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "An error occurred";
       });
