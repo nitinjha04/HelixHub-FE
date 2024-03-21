@@ -62,7 +62,6 @@ export default function TeacherDetails() {
           </FormControl>
         </Header>
       </div>
-      {/* <div className="grid h-full overflow-auto no-scrollbar grid-cols-12 col-span-12 lg:col-span-9   pb-6  gap-6 w-full "> */}
       <div className=" relative h-full overflow-auto no-scrollbar flex flex-col  rounded-default pb-6 col-span-12 lg:col-span-9  gap-6 w-full  bg-[#FFFFFF]">
         <div className="absolute top-0 w-full h-24 rounded-t-[20px] bg-bgDefaultColor">
           <img
@@ -112,7 +111,6 @@ export default function TeacherDetails() {
               </span>
             </div>
             <div className=" gap-7 flex  w-full flex-wrap  ">
-              {/* <div className=" flex flex-col lg:flex-row gap-7"> */}
               <span className=" text-defaultTextColor font-semibold text-sm lg:text-lg">
                 {/* TODO to change it dynamically */}
                 Jakarta, Indonesia
@@ -121,7 +119,6 @@ export default function TeacherDetails() {
                 {userDetail?.phone?.toString().slice(0, 2)}{" "}
                 {userDetail?.phone?.toString().slice(2)}
               </span>
-              {/* </div> */}
               <span className=" text-defaultTextColor font-semibold text-sm lg:text-lg">
                 {userDetail.email}
               </span>
@@ -157,7 +154,6 @@ export default function TeacherDetails() {
           </div>
         )}
       </div>
-      {/* </div> */}
       <Schedule />
     </div>
   );
