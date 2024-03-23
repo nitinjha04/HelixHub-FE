@@ -6,8 +6,13 @@ import {
   FormHelperText,
   FormLabel,
   Input,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
   Radio,
   RadioGroup,
+  Select,
+  SelectChangeEvent,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import {
@@ -35,8 +40,24 @@ const UserForm: FC<UserForm> = ({
   // register,
   // handleSubmit,
 }) => {
-  const { register, handleSubmit, reset } = useForm<UserData>();
+  const { register, handleSubmit, reset, setError } = useForm<UserData>();
   const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [grade, setGrade] = useState<string | undefined>("V");
+
+  const grades = [
+    { grade: "I" },
+    { grade: "II" },
+    { grade: "III" },
+    { grade: "IV" },
+    { grade: "V" },
+    { grade: "VI" },
+    { grade: "VII" },
+    { grade: "VIII" },
+    { grade: "IX" },
+    { grade: "X" },
+    { grade: "XI" },
+    { grade: "XII" },
+  ];
 
   const onSubmitForm: SubmitHandler<UserData> = (data) => {
     const userData: any = {
@@ -46,6 +67,15 @@ const UserForm: FC<UserForm> = ({
     if (profileImage) {
       userData.file = profileImage;
     }
+
+    if (student && !grade) {
+      /// give here error of useForm error that please put the class
+    }
+
+    if (student && grade) {
+      userData.grade = grade;
+    }
+
     console.log(userData);
     onSubmit(userData);
   };
@@ -197,23 +227,34 @@ const UserForm: FC<UserForm> = ({
               </FormControl>
               {student && (
                 <div className=" w-full">
-                  <FormControl className="w-full lg:w-1/2 h-fit">
+                  <FormControl
+                    sx={{ m: 1, minWidth: 120 }}
+                    size="small"
+                    className="w-full lg:w-1/2 gap-2 h-fit"
+                  >
                     <FormLabel className=" text-defaultTextColor text-lg font-semibold">
                       Grade *
                     </FormLabel>
-                    <Input
-                      {...register("grade", {
-                        required: "Grade is required",
-                      })}
-                      name="grade"
-                      placeholder="VII"
-                      className="  h-full py-1 border-[1px] px-3  border-inputBoxColor rounded-md"
-                      required
-                      disableUnderline
-                    />
-                    <FormHelperText className="flex justify-start pr-4 items-start w-full font-normal text-xs text-inputBoxColor">
-                      In Roman Numbers
-                    </FormHelperText>
+                    {/* <InputLabel id="demo-select-small-label">Age</InputLabel> */}
+
+                    <Select
+                      input={<OutlinedInput />}
+                      inputProps={{ "aria-label": "Without label" }}
+                      labelId="demo-select-small-label"
+                      id="demo-select-small"
+                      value={grade}
+                      label="Grade"
+                      onChange={(e: SelectChangeEvent) =>
+                        setGrade(e.target.value)
+                      }
+                    >
+                      {/* <MenuItem value="V">
+                        V
+                      </MenuItem> */}
+                      {grades.map((data) => (
+                        <MenuItem value={data.grade}>{data.grade}</MenuItem>
+                      ))}
+                    </Select>
                   </FormControl>
                 </div>
               )}
@@ -349,6 +390,11 @@ const ParentDetails: FC<{ register: any }> = ({ register }) => {
             row
             aria-labelledby="demo-row-radio-buttons-group-label"
             name="row-radio-buttons-group"
+            defaultValue="card"
+            onChange={(e) => console.log(e.target.value)}
+            {...register("paymentType", {
+              required: "Payment type is required",
+            })}
           >
             <FormControlLabel value="cash" control={<Radio />} label="cash" />
             <FormControlLabel value="card" control={<Radio />} label="card" />

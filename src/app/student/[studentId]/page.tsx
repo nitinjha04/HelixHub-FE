@@ -7,14 +7,13 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Header from "@/partials/Header";
 import { useEffect, useState } from "react";
-import CustomPagination from "@/components/Pagination";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Schedule from "@/components/schedule/Schedule";
 import useAuthorization from "@/components/hooks/useAuthorization";
 import { useParams } from "next/navigation";
 import { selectUserDetail } from "@/store/reducers/userReducer";
 import UserAction from "@/store/actions/userAction";
 import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
+import PaymentTable from "@/components/PaymentTable";
 
 export default function StudentDetails() {
   const params = useParams();
@@ -22,7 +21,7 @@ export default function StudentDetails() {
   const userDetail = useAppSelector(selectUserDetail);
   const ProtectPage = useAuthorization(["Admin", "Teacher"]);
 
-  const demoData = [
+  const paymentDemoData = [
     {
       id: 12345678,
       date: "2 March 20212, 13:45 PM",
@@ -115,11 +114,6 @@ export default function StudentDetails() {
     },
   ];
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [dataToShow, setDataToShow] = useState<
-    { date: string; id: Number; status: String; payment: Number }[]
-  >([]);
-
   useEffect(() => {
     const studentId = params.studentId.toString();
     dispatch(UserAction.getUserDetailsAsync(studentId));
@@ -209,7 +203,12 @@ export default function StudentDetails() {
                 </div>
               </div>
             </div>
-            <div className=" rounded-default bg-white flex flex-col  px-6 py-5 row-span-9 col-span-12 ">
+            <PaymentTable
+              paymentData={paymentDemoData}
+              heading="Payment History"
+              student
+            />
+            {/* <div className=" rounded-default bg-white flex flex-col  px-6 py-5 row-span-9 col-span-12 ">
               <div className=" w-full flex flex-col gap-5  ">
                 <span className=" font-bold text-defaultTextColor text-xl  ">
                   Payment History
@@ -259,7 +258,7 @@ export default function StudentDetails() {
                 tableData={demoData}
                 setDataToShow={setDataToShow}
               />
-            </div>
+            </div> */}
           </div>
           <Schedule />
         </>

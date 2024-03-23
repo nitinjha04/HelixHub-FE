@@ -4,16 +4,19 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import { selectCurrentUserInfo } from "@/store/reducers/userReducer";
 import { useRouter } from "next/navigation";
 import messageAction from "@/store/actions/messageAction";
 import { selectLatestMessageInfo } from "@/store/reducers/messageReducer";
 import useAuthorization from "@/components/hooks/useAuthorization";
+import CustomPagination from "@/components/Pagination";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import PaymentTable from "@/components/PaymentTable";
 
 export default function Home() {
-  const ProtectPage = useAuthorization(["Student", "Teacher"], "/admin");
+  // const ProtectPage = useAuthorization(["Student", "Teacher"], "/admin");
 
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -22,7 +25,6 @@ export default function Home() {
 
   const currentUser = useAppSelector(selectCurrentUserInfo);
 
-  console.log("currentUser", currentUser);
   const demoData = [
     {
       name: "Samantha William",
@@ -71,6 +73,99 @@ export default function Home() {
       name: "Samantha William",
       message: " Lorem ipsum dolor sit amet",
       updatedAt: "12:45 PM",
+    },
+  ];
+
+  const paymentDemoData = [
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Unpaid",
+    },
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Unpaid",
+    },
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Canceled",
+    },
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Complete",
+    },
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Complete",
+    },
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Complete",
+    },
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Complete",
+    },
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Complete",
+    },
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Complete",
+    },
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Complete",
+    },
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Complete",
+    },
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Complete",
+    },
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Complete",
+    },
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Complete",
+    },
+    {
+      id: 12345678,
+      date: "2 March 20212, 13:45 PM",
+      payment: 50036,
+      status: "Complete",
     },
   ];
 
@@ -278,6 +373,7 @@ export default function Home() {
             </Button>
           </div>
         </div>
+        <PaymentTable paymentData={paymentDemoData} heading="Fees Details" student />
       </div>
       <div className="lg:flex bg-white overflow-auto no-scrollbar flex-col gap-8 px-6 py-6 hidden col-span-3 w-full">
         <div className=" h-fit flex gap-6 justify-end w-full">
