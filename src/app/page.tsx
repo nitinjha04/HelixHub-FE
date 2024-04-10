@@ -334,7 +334,7 @@ export default function Home() {
               />
             </FormControl>
             <div className=" w-full flex gap-4 flex-col">
-              {latestMessageInfo.slice(0, 5).map((data, index) => (
+              {latestMessageInfo?.slice(0, 5).map((data, index) => (
                 <div
                   // TODO when click on message open that person message box
                   onClick={() => router.push("chat")}
