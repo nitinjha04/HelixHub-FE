@@ -2,7 +2,8 @@ import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
 import TokenHelper from "../helpers/Token.helper";
 import { toast } from "react-toastify";
 
-axios.defaults.baseURL = "http://localhost:53321"; //  url
+// axios.defaults.baseURL = "http://localhost:53321"; //  url
+axios.defaults.baseURL = "https://helixhub-service.vercel.app/"; //  url
 
 axios.interceptors.request.use(
   async (
